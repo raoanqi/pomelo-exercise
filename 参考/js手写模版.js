@@ -50,24 +50,24 @@ const sleep2 = duration => {
 
 // 发布订阅模式
 class PubSub {
-    constructor() {
-        this.content = {}
-    }
+  constructor() {
+    this.content = {}
+  }
 
-    on(type, fn) {
-    }
+  on(type, fn) {
+  }
 
-    once(type, fn) {
-    }
+  once(type, fn) {
+  }
 
-    off(type, fn) {
-    }
+  off(type, fn) {
+  }
 
-    clear(type) {
-    }
+  clear(type) {
+  }
 
-    emit(type, ...args) {
-    }
+  emit(type, ...args) {
+  }
 }
 
 // 数组去重
