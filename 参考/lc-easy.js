@@ -308,3 +308,69 @@ const mergeTrees = (root1, root2) => {
   mergeNode.right = mergeTrees(root1.right, root2.right)
   return mergeNode
 }
+
+//移除元素
+var removeElement = function (nums, val) {
+  const len = nums.length
+  let count = 0
+  for (let i = 0; i < len - count; i++) {
+    if (nums[i] === val) {
+      nums.splice(i, 1)
+      i--
+      count++
+    }
+  }
+  return len - count
+};
+
+//删除有序数组中的重复项
+var removeDuplicates = function (nums) {
+  const len = nums.length
+  let count = 0
+  for (let i = 0; i < len - count - 1; i++) {
+    if (nums[i] === nums[i + 1]) {
+      nums.splice(i, 1)
+      i--
+      count++
+    }
+  }
+  return len - count
+};
+
+//相同的树
+var isSameTree = function (p, q) {
+  const compareNode = (nodeA, nodeB) => {
+    if (!nodeA && !nodeB) return true
+    if ((!nodeA || !nodeB) || (nodeA.val !== nodeB.val)) return false
+    return compareNode(nodeA.left, nodeB.left) && compareNode(nodeA.right, nodeB.right)
+  }
+  return compareNode(p, q)
+};
+
+//回文数
+var isPalindrome = function (x) {
+  if (x < 0 || (x % 10 === 0 && x !== 0)) return false
+  const original = x
+  let reverse = 0
+  // 注意这个翻转数字的方式
+  while (x > 0) {
+    reverse = reverse * 10 + x % 10
+    x = Math.floor(x / 10)
+  }
+  return original === reverse
+};
+
+//加一
+var plusOne = function (digits) {
+  const len = digits.length
+  for (let i = len - 1; i >= 0; i--) {
+    digits[i]++
+    // 如果加上1之后不用进位，那么就直接返回
+    if (digits[i] < 10) return digits
+    // 如果加上1之后需要进位，那么这一位就会变为0
+    digits[i] = 0
+  }
+// 遍历完数组之后，如果还没有return，说明每一位都发生了进位
+// 此时数组中的每一个位置都是0，那么直接在前面补一位就可以了
+  return [1, ...digits]
+};
