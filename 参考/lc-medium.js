@@ -871,3 +871,67 @@ const canFinish = (numCourses, prerequisites) => {
   }
   return count === numCourses
 }
+
+//删除有序数组中的重复项2
+var removeDuplicates = function (nums) {
+  const len = nums.length
+  let count = 0
+  if (len < 3) return len
+  for (let i = 0; i < len - 2 - count; i++) {
+    if (nums[i] === nums[i + 1] && nums[i + 1] === nums[i + 2]) {
+      nums.splice(i, 1)
+      count++
+      i--
+    }
+  }
+  return len - count
+};
+
+//轮转数组
+var rotate = function (nums, k) {
+  const len = nums.length
+  k = k % len
+  nums.unshift(...nums.splice(-k))
+};
+
+//买卖股票的最佳时机2
+// 采用贪心算法的策略，只要当天的价格比前一天的价格高，那么就在昨天买入，今天卖出，这样就能获得最大的利润
+var maxProfit = function (prices) {
+  let max = 0
+  const len = prices.length
+  for (let i = 1; i < len; i++) {
+    if (prices[i] > prices[i - 1]) max += prices[i] - prices[i - 1]
+  }
+  return max
+};
+
+var longestCommonPrefix = function (strs) {
+  if (!strs || !strs.length) return ''
+  const len = strs[0].length
+  for (let i = 0; i < len; i++) {
+    const char = strs[0][i]
+    for (let j = 1; j < strs.length; j++) {
+      /**
+       * 注意这个：
+       * 如果循环中发现某个字符串的长度已经到顶了，那么说明这个字符串就是最长公共前缀
+       * 或者有某个字符串的字符不等于第一个字符串的字符，那么说明出现了不等于的情况，这个时候也该返回数据了
+       */
+      if (strs[j].length === i || strs[j][i] !== char) {
+        return strs[0].substring(0, i)
+      }
+    }
+  }
+  return strs[0]
+};
+
+//最后一个单词的长度
+var lengthOfLastWord = function (str) {
+  str = str.trim()
+  const len = str.length
+  let res = 0
+  for (let i = len - 1; i >= 0; i--) {
+    if (str[i] === ' ') break
+    res++
+  }
+  return res
+};
