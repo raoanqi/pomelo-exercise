@@ -374,3 +374,103 @@ var plusOne = function (digits) {
 // 此时数组中的每一个位置都是0，那么直接在前面补一位就可以了
   return [1, ...digits]
 };
+
+// 找出字符串中第一个匹配的下标
+var strStr = function (haystack, needle) {
+  const haystackLen = haystack.length
+  const needleLen = needle.length
+  if (!needleLen) return 0
+  if (needleLen > haystackLen) return -1
+  /**
+   * for循环中需要考虑到二者相等的情况，所以判断条件需要加上等于，否则当二者长度相等时，for循环直接退出了
+   */
+  for (let i = 0; i <= haystackLen - needleLen; i++) {
+    if (haystack.substring(i, i + needleLen) === needle) return i
+  }
+  return -1
+
+};
+// 验证回文串
+var isPalindrome = function (str) {
+  /**
+   * @type {string}
+   * 题目说明只包含数字和字符串，所以把所有的非数字以及非字符串全部删除，并转为小写符号便于统一处理
+   */
+  const pureString = str.replace(/[^a-zA-Z0-9]/g, '').toLowerCase()
+  /**
+   * 如果str未定义，或者为空串，或者长度为1，那么必然就是回文串
+   */
+  if (!pureString || !pureString.length || pureString.length === 1) return true
+  const pureStringLen = pureString.length
+  /**
+   * @type {number}
+   * 否则就是用双指针法进行判断
+   */
+  let left = 0, right = pureStringLen - 1
+  while (left < right) {
+    if (pureString[left] === pureString[right]) {
+      left++
+      right--
+    } else {
+      return false
+    }
+
+  }
+  return true
+};
+
+//判断子序列
+var isSubsequence = function (s, t) {
+  const sLen = s.length, tLen = t.length
+  let sIndex = 0, tIndex = 0
+  while (sIndex < sLen && tIndex < tLen) {
+    if (s[sIndex] === t[tIndex]) {
+      sIndex++
+    }
+    tIndex++
+  }
+  return sIndex === sLen
+};
+
+//汇总区间
+var summaryRanges = function (nums) {
+  const len = nums.length, res = []
+  let i = 0
+  while (i < len) {
+    // j从i开始循环
+    let j = i
+    // 如果j的后一个元素依然没有超出范围，并且当前元素加一与后一个元素相等，那么就可以继续循环，j++
+    while (j + 1 < len && nums[j] + 1 === nums[j + 1]) j++
+    // 跳出while循环之后，说明找到了一个区间，此时判断j与i的关系，如果相当，说明这个区间的开始结束是同一个元素，那么直接push当前元素
+    if (j === i) {
+      res.push(`${nums[i]}`)
+    } else {
+      // 否则，说明区间中不止一个元素，此时就要push指定的数据结构
+      res.push(`${nums[i]}->${nums[j]}`)
+    }
+    // 找到一个区间之后，i要指向j的后一个元素j+1，然后重新开始while循环
+    i = j + 1
+  }
+  return res
+};
+
+//赎金信
+var canConstruct = function (ransomNote, magazine) {
+  /**
+   * @type {Map<any, any>}
+   * 构建一个map，存储magazine中各个字符的出现次数
+   */
+  const charCount = new Map()
+  for (let char of magazine) charCount.set(char, (charCount.get(char) || 0) + 1)
+  /**
+   * 遍历randomNote,如果其中的某个字符在map中不存在，那么必然无法组成，返回false
+   * 如果其中的某个字符虽然存在，但是已经被前面的子串所使用完，那么也返回false
+   * 否则，就更新map中对应字符的次数
+   * 如果for循环能整个循环完毕，那么说明就可以组成，返回true
+   */
+  for (let char of ransomNote) {
+    if (!charCount.has(char) || charCount.get(char) === 0) return false
+    charCount.set(char, charCount.get(char) - 1)
+  }
+  return true
+};

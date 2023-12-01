@@ -935,3 +935,28 @@ var lengthOfLastWord = function (str) {
   }
   return res
 };
+
+//反转字符串中的单词
+var reverseWords = function (str) {
+  /**
+   * @type {string[]}
+   * 不要使用split(' ')，这种只能匹配到一个空格，正则/\s+/可以匹配到一个或者多个空格，这样才符合题目的要求
+   */
+  const list = str.trim().split(/\s+/)
+  return list.reverse().join(' ')
+};
+
+// 两数之和2--输入有序数组
+var twoSum = function (numbers, target) {
+  const len = numbers.length
+  let left = 0, right = len - 1
+  while (left < right) {
+    if (numbers[left] + numbers[right] > target) {
+      right--
+    } else if (numbers[left] + numbers[right] < target) {
+      left++
+    } else {
+      return [left + 1, right + 1]
+    }
+  }
+};
