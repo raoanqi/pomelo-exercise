@@ -960,3 +960,53 @@ var twoSum = function (numbers, target) {
     }
   }
 };
+
+// 跳跃游戏2
+var jump = function (nums) {
+  const len = nums.length
+  /**
+   * 数组长度为0或者1，不用跳，直接返回0即可
+   */
+  if (len < 2) return 0
+  /**
+   * @type {number}
+   * 开始循环，for循环的边界是小于len-1，因为需要执行跳跃操作，所以最多只需要循环到倒数第二个元素上
+   * maxReach:当前位置所能跳到的最远位置
+   * end:索引为i-1的元素所能到达的最远位置，就是上一个元素所能到达的最远位置
+   */
+  let step = 0, maxReach = 0, end = 0
+  for (let i = 0; i < len - 1; i++) {
+    // 更新当前元素能达到的最远的位置
+    maxReach = Math.max(maxReach, i + nums[i])
+    // 如果i===end，说明当前这个位置，就是上一个元素所能到达的最远位置，所以要更新一下end，这个时候的end就是现在这个元素所能到达的最远位置
+    // 同时，步数要加1
+    // 如果更新之后的maxReach大于等于数组长度，说明走完了，直接返回步数即可，不用再往后走了x
+    if (i === end) {
+      step++
+      end = maxReach
+      if (maxReach >= len - 1) return step
+    }
+  }
+};
+
+//H指数
+var hIndex = function (citations) {
+  // 先将数组按照从高到低的顺序进行排序
+  citations.sort((a, b) => b - a)
+  const len = citations.length
+  // 初始化h指数为0
+  let h = 0
+  for (let i = 0; i < len; i++) {
+    /**
+     * i代表当前在循环第几篇论文，
+     * 因为数组是降序排列，所以如果满足citations[i] > i这个条件，那么从0到i这i+1篇论文的引用次数至少都是i+1,所以此时将h更新为i+1
+     * 如果当前元素citations[i]已经不满足这个要求了，那么后续元素更小则更不会满足这个要求，说明已经找到了h指数的最大值，直接break结束循环即可
+     */
+    if (citations[i] > i) {
+      h = i + 1
+    } else {
+      break
+    }
+  }
+  return h
+};

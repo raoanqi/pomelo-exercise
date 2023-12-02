@@ -474,3 +474,18 @@ var canConstruct = function (ransomNote, magazine) {
   }
   return true
 };
+
+// 同构字符串
+var isIsomorphic = function (s, t) {
+  // 二者长度不同，肯定不是同构的，直接false
+  if (s.length !== t.length) return false
+  const sLastIndex = {}, tLastIndex = {};
+  for (let i = 0; i < s.length; i++) {
+    const charS = s[i];
+    const charT = t[i];
+    if (sLastIndex[charS] !== tLastIndex[charT]) return false
+    sLastIndex[charS] = i;
+    tLastIndex[charT] = i;
+  }
+  return true
+};
