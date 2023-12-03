@@ -1010,3 +1010,48 @@ var hIndex = function (citations) {
   }
   return h
 };
+
+//整数转罗马数字
+var intToRoman = function (num) {
+  /**
+   * @type {number[]}
+   * 定义好所有的罗马字母，以及对应的数字，然后依靠循环去判断如何将这些数字组合为目标的num
+   */
+  const numbers = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
+  const romas = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I']
+  const numberLen = numbers.length
+  let res = ''
+  for (let i = 0; i < numberLen; i++) {
+    while (num >= numbers[i]) {
+      res += romas[i]
+      num -= numbers[i]
+    }
+  }
+  return res
+};
+
+//长度最小的子数组：滑动窗口算法，时间复杂度是O(n)
+var minSubArrayLen = function (target, nums) {
+  const len = nums.length
+  /**
+   * @type {number}
+   * 先将最小长度设置为一个极限
+   */
+  let minLength = Infinity, left = 0, sum = 0
+  /**
+   * 使用滑动窗口开始逼近
+   */
+  for (let right = 0; right < len; right++) {
+    sum += nums[right]
+    while (sum >= target) {
+      /**
+       * @type {number}
+       * 当sum已经符合条件之后，即sum大于等于target之后，就要开更新窗口长度了，在这个过程中，需要不断更新minLength
+       */
+      minLength = Math.min(minLength, right - left + 1)
+      sum -= nums[left]
+      left++
+    }
+  }
+  return minLength === Infinity ? 0 : minLength
+};

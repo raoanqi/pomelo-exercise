@@ -489,3 +489,29 @@ var isIsomorphic = function (s, t) {
   }
   return true
 };
+
+// 单词规律
+var wordPattern = function (pattern, str) {
+  /**
+   * @type {any}
+   * 这里有一点要很注意，力扣的测试用例中，str中有的包含了constructor字符串，
+   * 如果patternToWord，wordToPattern直接用{}，在取值时可能就直接取到了构造器函数，而不是题目指定的关系，那么就会干扰代码运行
+   * 所以这里使用Object.create(null)，这样构造出来的对象，constructor属性就是undefined，不会干扰代码运行
+   */
+  const patternToWord = Object.create(null), wordToPattern = Object.create(null), patternLen = pattern.length,
+      words = str.split(' '),
+      wordLen = words.length
+  if (patternLen !== wordLen) return false
+  for (let i = 0; i < patternLen; i++) {
+    const char = pattern[i], word = words[i]
+    if (!patternToWord[char] && !wordToPattern[word]) {
+      patternToWord[char] = word
+      wordToPattern[word] = char
+    } else {
+      if (patternToWord[char] !== word || wordToPattern[word] !== char) {
+        return false
+      }
+    }
+  }
+  return true
+};
