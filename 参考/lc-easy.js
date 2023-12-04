@@ -515,3 +515,25 @@ var wordPattern = function (pattern, str) {
   }
   return true
 };
+
+// 有效的字母异位词
+var isAnagram = function (s, t) {
+  const sLen = s.length, tLen = t.length
+  if (sLen !== tLen) return false
+  const sMap = {}
+  for (let i = 0; i < sLen; i++) {
+    if (!sMap[s[i]]) {
+      sMap[s[i]] = 1
+    } else {
+      sMap[s[i]]++
+    }
+  }
+  for (let i = 0; i < tLen; i++) {
+    if (sMap[t[i]] > 0) {
+      sMap[t[i]]--
+    } else if (sMap[t[i]] === undefined || sMap[t[i]] === 0) {
+      return false
+    }
+  }
+  return true
+};
