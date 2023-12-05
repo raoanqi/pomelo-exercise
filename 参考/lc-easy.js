@@ -537,3 +537,27 @@ var isAnagram = function (s, t) {
   }
   return true
 };
+
+// 存在重复元素2
+var containsNearbyDuplicate = function (nums, k) {
+  const len = nums.length
+  // 题目说明数组长度至少是1，但是长度为1的话肯定不会有两个元素满足要求，那么直接返回false
+  if (len === 1) return false
+  const map = {}
+  for (let i = 0; i < len; i++) {
+    const currentNumber = nums[i]
+    if (map[currentNumber] !== undefined && Math.abs(i - map[currentNumber]) <= k) return true
+    map[currentNumber] = i
+  }
+  return false
+};
+
+//路径总和
+var hasPathSum = function (root, targetSum) {
+  // 如果当前的根节点为空，那么直接返回false
+  if (!root) return false
+  // 如果当前的根节点已经是叶子结点，那么就判断当前根节点的值是不是等于目标和
+  if (!root.left && !root.right) return root.val === targetSum
+  // 如果上面都不满足，那么就开始递归判断当前根节点的左右子树
+  return hasPathSum(root.left, targetSum - root.val) || hasPathSum(root.right, targetSum - root.val)
+};
