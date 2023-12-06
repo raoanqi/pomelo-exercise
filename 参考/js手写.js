@@ -101,7 +101,7 @@ Array.prototype.myReduce = function (fn, initValue) {
 // curry
 const curry = function (fn) {
   return function curried(...args) {
-    if (args.length > fn.length) {
+    if (args.length >= fn.length) {
       return fn.apply(this, args)
     } else {
       return function (...newArgs) {
@@ -123,7 +123,7 @@ const deepClone = function (target) {
     }
   } else if (target instanceof RegExp) {
     res = new RegExp(target)
-  } else if (target instanceof Date()) {
+  } else if (target instanceof Date) {
     res = new Date(target.getTime())
   } else {
     res = {}
