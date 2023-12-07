@@ -561,3 +561,30 @@ var hasPathSum = function (root, targetSum) {
   // 如果上面都不满足，那么就开始递归判断当前根节点的左右子树
   return hasPathSum(root.left, targetSum - root.val) || hasPathSum(root.right, targetSum - root.val)
 };
+
+//完全二叉树的节点个数
+var countNodes = function (root) {
+  if (!root) return 0
+  let leftHeight = 0, rightHeight = 0, left = root, right = root
+  // 计算左子树的高度
+  while (left) {
+    leftHeight++;
+    left = left.left;
+  }
+  // 计算右子树的高度
+  while (right) {
+    rightHeight++;
+    right = right.right;
+  }
+  /**
+   * 题目中说明，同一层中的元素不是满的，那么都会出现在树的左侧
+   * 这样一来，如果发现某一层的右子树高度如果与左子树高度相等，那么说明这个二叉树必然就是满二叉树，此时可以直接使用2^n-1计算节点数量
+   * 否则，就要递归进行计算
+   */
+  if (leftHeight === rightHeight) {
+    return Math.pow(2, leftHeight) - 1;
+  } else {
+    // 如果不相等，递归计算左右子树的节点数
+    return 1 + countNodes(root.left) + countNodes(root.right);
+  }
+};
