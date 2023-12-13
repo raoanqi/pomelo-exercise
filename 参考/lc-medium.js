@@ -1055,3 +1055,32 @@ var minSubArrayLen = function (target, nums) {
   }
   return minLength === Infinity ? 0 : minLength
 };
+
+// 分隔链表：注意每次循环之后要将当前的元素从链表中清除
+var partition = function (head, x) {
+  /*
+  * 思路：创建两个新的链表，然后遍历题目中给出的链表，小于的放在其中一个链表，
+  * 大于的放在另外一个链表，最后合并两个链表
+  * */
+  const dummy1 = new ListNode(-1)
+  const dummy2 = new ListNode(-1)
+  let current1 = dummy1, current2 = dummy2
+  let current = head
+  while (current) {
+    if (current.val >= x) {
+      current2.next = current
+      current2 = current2.next
+    } else {
+      current1.next = current
+      current1 = current1.next
+    }
+    /*
+    * 这里比较关键：每次循环一个元素，都要将这个元素从题目所给的链表中清除，否则容易造成环形链表
+    * */
+    const temp = current.next;
+    current.next = null;
+    current = temp
+  }
+  current1.next = dummy2.next
+  return dummy1.next
+};

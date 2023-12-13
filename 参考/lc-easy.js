@@ -588,3 +588,18 @@ var countNodes = function (root) {
     return 1 + countNodes(root.left) + countNodes(root.right);
   }
 };
+
+// 链表的中间结点
+/*
+* 思路：使用双指针：快慢指针，快指针每次走两步，慢指针每次走一步，当快指针走到最后一个元素时，
+* 如果链表长度为奇数，那么慢指针这个时候就指向中间结点
+* 如果链表长度为偶数，那么慢指针这个时候就指向中间两个元素的后一个元素
+* */
+var middleNode = function (head) {
+  let slow = head, fast = head
+  while (fast && fast.next) {
+    slow = slow.next
+    fast = fast.next.next
+  }
+  return slow
+};
