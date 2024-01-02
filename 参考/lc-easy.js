@@ -12,21 +12,20 @@ const twoNumberSum = (nums, target) => {
 
 //有效括号
 const validBrackets = str => {
-  if ([')', ']', '}'].includes(str[0])) return false
-  const temp = [], len = str.length
+  const stack = [], len = str.length
   for (let i = 0; i < len; i++) {
     if (['(', '[', '{'].includes(str[i])) {
-      temp.push(str[i])
+      stack.push(str[i])
     } else {
-      const peek = temp[temp.length - 1]
-      if ((str[i] === '(' && peek === ')') || (str[i] === '[' && peek === ']') || (str[i] === '{' && peek === '}')) {
-        temp.pop()
+      const peek = stack[stack.length - 1]
+      if ((str[i] === ')' && peek === '(') || (str[i] === ']' && peek === '[') || (str[i] === '}' && peek === '{')) {
+        stack.pop()
       } else {
         return false
       }
     }
   }
-  return !temp.length
+  return stack.length === 0
 }
 
 //合并两个有序链表
