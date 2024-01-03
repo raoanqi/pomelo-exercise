@@ -126,3 +126,138 @@ const hasCycle = head => {
   }
   return false
 }
+
+// 相交链表
+const getIntersectionNode = (l1, l2) => {
+  if (!l1 || !l2) return null
+  const set = new Set()
+  while (l1) {
+    set.add(l1)
+    l1 = l1.next
+  }
+  while (l2) {
+    if (set.has(l2)) return l2
+    l2 = l2.next
+  }
+  return null
+}
+
+// 多数元素
+const majorityElement = nums => {
+  let count = 0, candidate
+  for (let num of nums) {
+    if (count == 0) {
+      candidate = num
+    }
+    count += num === candidate ? 1 : -1
+  }
+  return candidate
+}
+
+// 反转链表
+const reverseList = head => {
+  let prev = null, current = head
+  while (current) {
+    const next = current.next
+    current.next = prev
+    prev = current
+    current = next
+  }
+  return prev
+}
+
+// 回文链表
+const isPalindrome = head => {
+  if (!head || !head.next) return true
+  const reverse = listHead => {
+    let prev = null, current = listHead
+    while (current) {
+      const next = current.next
+      current.next = prev
+      prev = current
+      current = next
+    }
+    return prev
+  }
+  let slow = head, fast = head
+  while (fast && fast.next) {
+    slow = slow.next
+    fast = fast.next.next
+  }
+  const secondHalf = reverse(slow)
+  let p1 = head, p2 = secondHalf
+  while (p2) {
+    if (p1.val !== p2.val) return false
+    p1 = p1.next
+    p2 = p2.next
+  }
+  return true
+}
+
+// 移动0
+const moveZeroes = nums => {
+  const len = nums.length
+  if (len < 2) return nums
+  let count = 0
+  for (let i = 0; i < len - count; i++) {
+    if (nums[i] === 0) {
+      nums.push(0)
+      nums.splice(i, 1)
+      i--
+      count++
+    }
+  }
+  return nums
+}
+
+// 比特位计数
+const countBits = num => {
+  const count = n => {
+    let zeroNumber = 0
+    while (n !== 0) {
+      n = n & (n - 1)
+      zeroNumber++
+    }
+    return zeroNumber
+  }
+  const res = []
+  for (let i = 0; i <= num; i++) res.push(count(i))
+  return res
+}
+
+// 找到所有数组中消失的数字
+const findDisappearedNumbers = nums => {
+}
+
+// 汉明距离
+const hammingDistance = (x, y) => {
+  let xorRes = x ^ y, count = 0
+  while (xorRes) {
+    xorRes = xorRes & (xorRes - 1)
+    count++
+  }
+  return count
+}
+
+// 二叉树的直径
+const diameterOfBinaryTree = root => {
+  let diameter = 0
+  const calcDepth = node => {
+    if (!node) return 0
+    const leftDepth = calcDepth(node.left), rightDepth = calcDepth(node.right)
+    diameter = Math.max(diameter, leftDepth + rightDepth)
+    return Math.max(leftDepth, rightDepth) + 1
+  }
+  calcDepth(root)
+  return diameter
+}
+
+// 合并二叉树
+const mergeTrees = (root1, root2) => {
+  if (!root1) return root2
+  if (!root2) return root1
+  const mergeRoot = new TreeNode(root1.val + root2.val)
+  mergeRoot.left = mergeTrees(root1.left, root2.left)
+  mergeRoot.right = mergeTrees(root1.right, root2.right)
+  return mergeRoot
+}

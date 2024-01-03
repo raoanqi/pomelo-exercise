@@ -103,3 +103,60 @@ const threeSum = nums => {
   }
   return res
 }
+
+//电话号码的字母组合
+const letterCombinations = digits => {
+  const res = []
+  if (!digits) return res
+  const digitsMap = {
+    2: 'abc',
+    3: 'def',
+    4: 'ghi',
+    5: 'jkl',
+    6: 'mno',
+    7: 'pqrs',
+    8: 'tuv',
+    9: 'wxyz'
+  }
+  const traceback = (current, nextDigits) => {
+    if (nextDigits.length === 0) {
+      res.push(current)
+    } else {
+      const letters = digitsMap[nextDigits[0]], len = letters.length
+      for (let i = 0; i < len; i++) {
+        traceback(current + letters[i], nextDigits.slice(1))
+      }
+    }
+  }
+  traceback('', digits)
+  return res
+}
+
+//删除链表的倒数第N个节点
+const removeNthFromEnd = (head, n) => {
+  const dummy = new ListNode(-1)
+  dummy.next = head
+  let slow = dummy, fast = dummy
+  for (let i = 0; i <= n; i++) {
+    fast = fast.next
+  }
+  while (fast) {
+    slow = slow.next
+    fast = fast.next
+  }
+  slow.next = slow.next.next
+  return dummy.next
+}
+
+//括号生成
+const generateParenthesis = n => {
+}
+
+//下一个排列
+const nextPermutation = nums => {
+}
+
+//搜索旋转排序数组
+const search = (nums, target) => {
+
+}

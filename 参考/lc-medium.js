@@ -139,6 +139,9 @@ const threeSum = nums => {
 }
 
 //电话号码的字母组合
+/**
+ * 类似于全排列这样的问题，都可以使用回溯算法解决下面的算法比较好套用了回溯算法的算法框架
+ */
 const letterCombinations = digits => {
   const res = []
   if (!digits) return res
