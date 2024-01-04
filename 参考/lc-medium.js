@@ -235,6 +235,7 @@ const search = (nums, target) => {
         left = mid + 1
       }
     } else {
+      // 否则，就说明mid右边这一段是递增的
       if (nums[mid] < target && target <= nums[right]) {
         left = mid + 1
       } else {
@@ -290,7 +291,8 @@ const combinationSum = (candidates, target) => {
       // 对于数组中的每一个元素，在每一轮循环中分别将其固定，然后使用回溯来判断是否能够找到符合要求的元素
       combination.push(candidates[i])
       backtrace(combination, i, target - candidates[i])
-      // todo：注意这个移除最后元素的步骤，这个是回溯算法的关键步骤
+      // 注意这个移除最后元素的步骤，这个是回溯算法的关键步骤
+      // 撤销选择，回到上一步
       combination.pop()
     }
   }

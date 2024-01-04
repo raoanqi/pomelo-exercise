@@ -150,6 +150,21 @@ const removeNthFromEnd = (head, n) => {
 
 //括号生成
 const generateParenthesis = n => {
+  const res = []
+  const traceback = (current, openCount, closeCount) => {
+    if (current.length === 2 * n) {
+      res.push(current)
+      return
+    }
+    if (openCount < n) {
+      traceback(current + '(', openCount + 1, closeCount)
+    }
+    if (closeCount < openCount) {
+      traceback(current + ')', openCount, closeCount + 1)
+    }
+  }
+  traceback('', 0, 0)
+  return res
 }
 
 //下一个排列
@@ -158,5 +173,52 @@ const nextPermutation = nums => {
 
 //搜索旋转排序数组
 const search = (nums, target) => {
+  const len = nums.length
+  let left = 0, right = len - 1
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2)
+    if (nums[mid] === target) return mid
+    if (nums[left] <= nums[mid]) {
+      if (nums[left] <= target && target <= nums[mid]) {
+        right = mid - 1
+      } else {
+        left = mid + 1
+      }
+    } else {
+      if (nums[mid] < target && target <= nums[right]) {
+        left = mid + 1
+      } else {
+        right = mid - 1
+      }
+    }
+  }
+  return -1
+}
 
+//在排序数组中查找元素的第一个和最后一个位置
+const searchRange = (nums, target) => {
+}
+
+//组合总和
+const combinationSum = (candidates, target) => {
+  const res = []
+  const backtrace = (combination, start, target) => {
+    if (target === 0) {
+      res.push([...combination])
+      return
+    }
+    if (target < 0) return
+    const len = candidates.length
+    for (let i = start; i < len; i++) {
+      combination.push(candidates[i])
+      backtrace(combination, i, target - candidates[i])
+      combination.pop()
+    }
+  }
+  backtrace([], 0, target)
+  return res
+}
+
+//全排列
+const permute = nums => {
 }
