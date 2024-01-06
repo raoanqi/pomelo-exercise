@@ -303,32 +303,32 @@ const combinationSum = (candidates, target) => {
 
 // 全排列
 const permute = nums => {
-  // 回溯函数
-  // nums：目标数组
-  // current：当前正在生成的排列
-  // res：用于存储所有不同的排列结果
-  const backtrace = (nums, current, res) => {
-    const len = nums.length
-    // 如果当前正在生成的排列中所包含的元素数量与题干中的nums的元素数量一致，说明本轮递归已经完成
+  const res = [], len = nums.length
+  const backtrace = (current) => {
     if (current.length === len) {
-      return res.push([...current])
+      res.push([...current])
+      return
     }
-    // 否则就开始寻找
     for (let i = 0; i < len; i++) {
-      // 如果当前正在生成的排列中已经包含了正在遍历的nums[i]元素，就跳过本轮循环
+      // 如果当前正在生成的排列current中已经包含了nums[i]，那么就跳过
+      // 防止生成[1,1,1],[1,1,2]类似的排列
       if (current.includes(nums[i])) continue
-      // 否则就添加进正在生成的排列中
       current.push(nums[i])
-      backtrace(nums, current, res)
+      backtrace(current)
       current.pop()
     }
   }
-  const res = []
-  backtrace(nums, [], res)
+  backtrace([])
   return res
 }
 
 // 旋转图像
+/**
+ * @param matrix
+ * 矩阵顺序旋转90度，可以使用两步实现：
+ * 先按照主对角线进行翻转
+ * 再进行水平翻转，也就是水平的镜像翻转
+ */
 const rotate = matrix => {
   const len = matrix.length
   // 旋转主对角线

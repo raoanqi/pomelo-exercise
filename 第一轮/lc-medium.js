@@ -221,4 +221,99 @@ const combinationSum = (candidates, target) => {
 
 //全排列
 const permute = nums => {
+  const res = [], len = nums.length
+  const backtrace = (current) => {
+    if (current.length === len) {
+      res.push([...current])
+      return
+    }
+    for (let i = 0; i < len; i++) {
+      if (current.includes(nums[i])) continue
+      current.push(nums[i])
+      backtrace(current)
+      current.pop()
+    }
+  }
+  backtrace([])
+  return res
+}
+
+//旋转图像
+const rotate = matrix => {
+  const len = matrix.length
+  for (let i = 0; i < len; i++) {
+    for (let j = i + 1; j < len; j++) {
+      [matrix[i][j], matrix[j][i]] = [matrix[j][i], matrix[i][j]]
+    }
+  }
+  for (let i = 0; i < len; i++) {
+    for (let j = 0; j < len / 2; j++) {
+      [matrix[i][j], matrix[i][len - 1 - j]] = [matrix[i][len - 1 - j], matrix[i][j]]
+    }
+  }
+}
+
+//字母异位词分组
+const groupAnagrams = strs => {
+  const map = new Map()
+  for (let str of strs) {
+    const sortedStr = str.split('').sort().join()
+    if (!map.has(sortedStr)) {
+      map.set(sortedStr, [str])
+    } else {
+      const temp = map.get(sortedStr)
+      temp.push(str)
+      map.set(sortedStr, temp)
+    }
+  }
+  return Array.from(map.values())
+}
+
+// 最大子数组和
+const maxSubArray = nums => {
+  const len = nums.length
+  let res = nums[0], currentSum = nums[0]
+  for (let i = 1; i < len; i++) {
+    currentSum = Math.max(nums[i], currentSum + nums[i])
+    res = Math.max(res, currentSum)
+  }
+  return res
+}
+
+//跳跃游戏
+const canJump = nums => {
+  const len = nums.length
+  let lastIndex = len - 1
+  for (let i = len - 1; i >= 0; i--) {
+    if (i + nums[i] >= lastIndex) lastIndex = i
+  }
+  return lastIndex === 0
+}
+
+//合并区间
+const mergeIntervals = intervals => {
+  const len = intervals.length
+  if (len < 2) {
+    return intervals
+  }
+  intervals.sort((a, b) => a[0] - b[0])
+  const res = [intervals[0]]
+  for (let i = 1; i < len; i++) {
+    if (intervals[i][0] <= res[res.length - 1][1]) {
+      res[res.length - 1][1] = Math.max(intervals[i][1], res[res.length - 1][1])
+    } else {
+      res.push(intervals[i])
+    }
+  }
+  return res
+}
+
+//不同路径
+const uniquePaths = (m, n) => {
+
+}
+
+//最小路径和
+const minPathSum = grid => {
+
 }
