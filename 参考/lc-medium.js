@@ -470,6 +470,25 @@ const minPathSum = grid => {
   return dp[m - 1][n - 1]
 }
 
+// 编辑距离
+const minDistance = (word1, word2) => {
+  const len1 = word1.length, len2 = word2.length, map = new Map()
+  const dp = (i, j) => {
+    if (i === -1) return j + 1
+    if (j === -1) return i + 1
+    if (map.get([i, j])) return map.get([i, j])
+    if (word1[i] === word2[j]) {
+      map.set([i, j], dp(i - 1, j - 1))
+    } else {
+      map.set([i, j], Math.min(dp(i, j - 1) + 1, dp(i - 1, j) + 1, dp(i - 1, j - 1) + 1))
+    }
+    return map.get([i, j])
+  }
+  return dp(len1 - 1, len2 - 1)
+}
+
+console.log(minDistance('horse', 'ros'))
+
 // 颜色分类
 /**
  * @param nums

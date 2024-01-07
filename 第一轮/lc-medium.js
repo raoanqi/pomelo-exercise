@@ -317,3 +317,37 @@ const uniquePaths = (m, n) => {
 const minPathSum = grid => {
 
 }
+
+// 编辑距离
+const minDistance = (word1, word2) => {
+  const len1 = word1.length, len2 = word2.length, map = new Map()
+
+  /**
+   * @param i
+   * @param j
+   * @returns {`${string},${string}`}
+   * 这里注意，不要使用[i,j]的数组作为map的key，有可能会重复，所以使用字符串
+   */
+  const getKey = (i, j) => `${i},${j}`
+  const dp = (i, j) => {
+    if (i === -1) return j + 1
+    if (j === -1) return i + 1
+
+    const key = getKey(i, j)
+    if (map.get(key)) return map.get(key)
+
+    if (word1[i] === word2[j]) {
+      map.set(key, dp(i - 1, j - 1))
+    } else {
+      map.set(key, Math.min(dp(i, j - 1) + 1, dp(i - 1, j) + 1, dp(i - 1, j - 1) + 1))
+    }
+
+    return map.get(key)
+  }
+  return dp(len1 - 1, len2 - 1)
+}
+
+//颜色分类
+const sortColors = nums => {
+
+}
