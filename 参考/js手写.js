@@ -75,11 +75,9 @@ Array.prototype.myFlat = function (level = 1) {
   if (!Array.isArray(this)) throw new Error('不是数组')
   if (typeof level !== 'number' || level <= 0) return this
   let that = this
-  while (level > 0) {
-    if (that.some(ele => Array.isArray(ele))) {
-      that = [].concat.apply([], that)
-      level--
-    }
+  while (level > 0 && that.some(ele => Array.isArray(ele))) {
+    that = [].concat.apply([], that)
+    level--
   }
   return that
 }
@@ -188,4 +186,49 @@ const arrUnique3 = arr => {
     (arr[i - 1] !== arr[i]) && (res.push(arr[i]))
   }
   return res
+}
+
+// 手写shuffle随机打乱一个数组(bfe 8)
+// todo
+/**
+ * @param arr
+ * 洗牌算法
+ */
+const shuffle = arr => {
+  for (let i = 0; i < arr.length; i++) {
+    // 在每一次迭代中，生成一个随机索引 j，范围在当前元素索引 i 到数组末尾之间（包括 i 和末尾）
+    const j = i + Math.floor(Math.random() * (arr.length - i));
+    // 整体而言，这个算法遍历数组，每次迭代都随机选择一个元素与当前位置的元素进行交换，从而达到打乱数组顺序的目的
+    [arr[i], arr[j]] = [arr[j], arr[i]]
+  }
+}
+
+// 实现一个composition方法(bfe 11)
+// todo
+const pipe = funcs => {
+  return function (arg) {
+    return funcs.reduce((result, func) => {
+      return func.call(this, result)
+    }, arg)
+  }
+}
+
+// 实现一个特殊的sum方法(bfe 23)
+/**
+ * @param num
+ * @returns {any}
+ * const sum1 = sum(1)
+ * sum1(2) == 3 // true
+ * sum1(3) == 4 // true
+ * sum(1)(2)(3) == 6 // true
+ * sum(5)(-1)(2) == 6 // true
+ */
+
+function sum(num) {
+  const func = function (num2) {
+    return num2 ? sum(num + num2) : num;
+  }
+
+  func.valueOf = () => num;
+  return func;
 }

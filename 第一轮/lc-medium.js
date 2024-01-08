@@ -310,12 +310,40 @@ const mergeIntervals = intervals => {
 
 //不同路径
 const uniquePaths = (m, n) => {
-
+  // base case
+  const dp = new Array(m).fill(0).map(() => new Array(n).fill(0))
+  for (let i = 0; i < m; i++) {
+    dp[i][0] = 1
+  }
+  for (let j = 0; j < n; j++) {
+    dp[0][j] = 1
+  }
+  // 开始穷举：这里是动态规划的核心过程，注意练习如何写出动态规划的状态转移方程
+  for (let i = 1; i < m; i++) {
+    for (let j = 1; j < n; j++) {
+      dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+    }
+  }
+  return dp[m - 1][n - 1]
 }
 
 //最小路径和
 const minPathSum = grid => {
-
+  const m = grid.length, n = grid[0].length
+  const dp = new Array(m).fill(0).map(() => new Array(n).fill(0))
+  dp[0][0] = grid[0][0]
+  for (let i = 1; i < m; i++) {
+    dp[i][0] = dp[i - 1][0] + grid[i][0]
+  }
+  for (let j = 1; j < n; j++) {
+    dp[0][j] = dp[0][j - 1] + grid[0][j]
+  }
+  for (let i = 1; i < m; i++) {
+    for (let j = 1; j < n; j++) {
+      dp[i][j] = Math.min(dp[i][j - 1], dp[i - 1][j]) + grid[i][j]
+    }
+  }
+  return dp[m - 1][n - 1]
 }
 
 // 编辑距离
@@ -349,5 +377,4 @@ const minDistance = (word1, word2) => {
 
 //颜色分类
 const sortColors = nums => {
-
 }
