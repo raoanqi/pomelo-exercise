@@ -542,7 +542,7 @@ const sortColors = nums => {
   // right：指向数组排序之后的第一个2
   // current：遍历过程中的指针，从0开始遍历
   let left = 0, right = len - 1, current = 0
-  // 等于的情况也要考虑，因为有可能数组中只有一个元素
+  // 等于的情况也要考虑，最后一个元素nums[right]也是需要判断的
   while (current <= right) {
     if (nums[current] === 0) {
       // 如果当前元素是0，那么就将其与left指向的元素交换位置
@@ -565,18 +565,23 @@ const sortColors = nums => {
 }
 
 // 子集
-// todo：针对回溯算法，需要进一步掌握
 const subsets = nums => {
+  // 初始化
   const len = nums.length, res = []
-  const backtrace = (startIndex, subset) => {
+  // 开始回溯，回溯的关键参数（当前结果：subset，所有的选择：startIndex）
+  const backtrace = (subset, startIndex) => {
+    // 这里并没有终止条件，题目中的子集可以是nums的
+    // 任何子集，包含空集与全集，所以直接添加
     res.push([...subset])
     for (let i = startIndex; i < len; i++) {
       subset.push(nums[i])
-      backtrace(i + 1, subset)
+      backtrace(subset, i + 1)
+      // 回溯的经典步骤：撤销操作，回到上一步，然后去遍历多叉树的另一个分支
       subset.pop()
     }
   }
-  backtrace(0, [])
+  // 回溯开始时，用于遍历的subset为[]，startIndex也是从0开始
+  backtrace([], 0)
   return res
 }
 
@@ -599,6 +604,12 @@ const numTrees = n => {
       // dp[j-1]：左子树的数量
       // dp[i-j]：右子树的数量
       // j-1,i-j加起来正好是i-1，就是去掉根节点的数量
+      /**
+       * @type {number}
+       * 内层循环中，外层循环的每一个元素都有机会充当根节点，所以内层循环范围就是[1,i]
+       * 在循环中，左子树的节点数量是j-1，所以右子树的节点数量就是(i-1)-(j-1)=i-j
+       * 由于二叉树的层层递进的关系，因此dp[i]+=左子树数量*右子树数量
+       */
       dp[i] += dp[j - 1] * dp[i - j]
     }
   }

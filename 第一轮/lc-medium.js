@@ -377,4 +377,71 @@ const minDistance = (word1, word2) => {
 
 //颜色分类
 const sortColors = nums => {
+  const len = nums.length
+  let left = 0, right = len - 1, current = 0
+  while (current <= right) {
+    if (nums[current] === 0) {
+      [nums[left], nums[current]] = [nums[current], nums[left]]
+      left++
+      current++
+    } else if (nums[current] === 2) {
+      [nums[current], nums[right]] = [nums[right], nums[current]]
+      right--
+    } else {
+      current++
+    }
+  }
 }
+
+//子集
+/**
+ * @param nums
+ * 这是一个很经典的全排列问题
+ */
+const subsets = nums => {
+  // 初始化
+  const len = nums.length, res = []
+  // 开始回溯，回溯的关键参数（当前结果：subset，所有的选择：startIndex）
+  const backtrace = (subset, startIndex) => {
+    // 这里并没有终止条件，题目中的子集可以是nums的
+    // 任何子集，包含空集与全集，所以直接添加
+    res.push([...subset])
+    for (let i = startIndex; i < len; i++) {
+      subset.push(nums[i])
+      backtrace(subset, i + 1)
+      // 回溯的经典步骤：撤销操作，回到上一步，然后去遍历多叉树的另一个分支
+      subset.pop()
+    }
+  }
+  // 回溯开始时，用于遍历的subset为[]，startIndex也是从0开始
+  backtrace([], 0)
+  return res
+}
+
+// 单词搜索
+const exist = (board, word) => {
+}
+
+// 不同的二叉树
+const numTrees = n => {
+  if ([0, 1].includes(n)) return 1
+  const dp = new Array(n + 1).fill(0)
+  dp[0] = 1
+  dp[1] = 1
+  for (let i = 2; i <= n; i++) {
+    for (let j = 1; j <= i; j++) {
+      dp[i] += dp[j - 1] * dp[i - j]
+    }
+  }
+  return dp[n]
+}
+
+//验证二叉搜索树
+const isValidBST = root => {
+  const helper = (node, lower, upper) => {
+    if (!node) return true
+    if (node.val <= lower || node.val >= upper) return false
+    return helper(node.left, lower, node.val) && helper(node.right, node.val, upper)
+  }
+  return helper(root, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER)
+};
