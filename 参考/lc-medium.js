@@ -636,6 +636,9 @@ const levelOrder = root => {
   // res：最终的遍历结果
   // queue：用于存储在下一轮遍历时需要遍历的节点，在开始遍历之前，初始化为[root]
   const res = [], queue = [root]
+  /**
+   * 核心思想：while用于遍历level，for循环用于遍历每个level从左到右的全部节点
+   */
   while (queue.length) {
     const levelSize = queue.length
     const currentLevel = []

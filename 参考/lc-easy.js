@@ -255,18 +255,18 @@ const countBits = n => {
   return res
 }
 
-// todo:不太明白
 //找到所有数字中消失的数字
+/**
+ * @param nums
+ * @returns {*[]}
+ * 将数组转换为集合操作，集合的查找时间复杂度是O(1)
+ */
 const findDisappearedNumbers = nums => {
-  const res = [], len = nums.length
-  // 第一遍：标记出现过的数字
-  for (let i = 0; i < len; i++) {
-    const index = Math.abs(nums[i]) - 1
-    if (nums[index] > 0) nums[index] = -nums[index]
-  }
-  // 第二遍
-  for (let i = 0; i < len; i++) {
-    if (nums[i] > 0) res.push(i + 1)
+  const res = [], len = nums.length, set = new Set(nums)
+  for (let i = 1; i <= len; i++) {
+    if (!set.has(i)) {
+      res.push(i)
+    }
   }
   return res
 }
@@ -601,4 +601,226 @@ var middleNode = function (head) {
     fast = fast.next.next
   }
   return slow
+};
+
+// 69 x的平方根
+/**
+ * @param x
+ * @returns {number|*}
+ *
+ */
+const mySqrt = x => {
+  if ([0, 1].includes(x)) return x
+  let left = 1, right = x
+  // 涉及到左右双指针的题目，一定要注意这个等于的边界条件
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2)
+    if (mid * mid < x) {
+      left = mid + 1
+    } else if (mid * mid > x) {
+      right = mid - 1
+    } else {
+      return mid
+    }
+  }
+  return right
+};
+
+// 108 将有序数组转换为二叉搜索树
+const sortedArrayToBST = nums => {
+  // 如果数组为空，那么根节点直接就是null
+  if (nums.length === 0) return null
+  /**
+   * 定义函数：生成对应的平衡二叉树的根节点
+   */
+  const buildTree = (left, right) => {
+    // 如果左指针大于右指针，那么说明已经走完整个nums数组了
+    if (left > right) return null
+    // 以left和right的中间点进行分割得到当前一轮构建中的mid
+    // 以mid为值构建tree node
+    const mid = Math.floor((left + right) / 2)
+    const root = new TreeNode(nums[mid])
+    // 根据函数定义，buildtree能够构建以（left，right）为参数的二叉树
+    // 那么得到root之后，开始构建root的左子树和右子树
+    root.left = buildTree(left, mid - 1)
+    root.right = buildTree(mid + 1, right)
+    // 最后返回根节点即可
+    return root
+  }
+  return buildTree(0, nums.length - 1)
+};
+
+// 118 杨辉三角
+const generate = numRows => {
+  // 第一行的元素就是[1]，直接添加
+  const res = [[1]]
+  // 从第二行开始，循环构建
+  for (let i = 1; i < numRows; i++) {
+    // 构建第i行元素要依靠上一行元素，取出来，避免反复读取数组元素
+    const prevRow = res[i - 1]
+    // 每一行的第一个元素都是1，直接写上
+    const currRow = [1]
+    // 循环计算元素
+    for (let j = 1; j < i; j++) {
+      currRow[j] = prevRow[j - 1] + prevRow[j]
+    }
+    currRow.push(1)
+    res.push(currRow)
+  }
+  return res
+};
+
+// 171 Excel表列序号
+/**
+ * @param columnTitle
+ * @returns {number}
+ * 实际上这道题可以看做26进制转换
+ */
+const titleToNumber = columnTitle => {
+  let res = 0
+  const len = columnTitle.length, startCode = 'A'.charCodeAt(0)
+  for (let i = 0; i < len; i++) {
+    // 获取当前元素的数值大小
+    const currentNumber = columnTitle.charCodeAt(i) - startCode + 1
+    // res更新：因为增加了一个元素的数据，所以用前一个res*26进制，再加上当前的数值，就是更新之后的结果
+    res = res * 26 + currentNumber
+  }
+  return res
+};
+
+// 191 位1的个数
+const hammingWeight = n => {
+  let res = 0
+  while (n !== 0) {
+    n = n & n - 1
+    res++
+  }
+  return res
+};
+
+// 202 快乐数
+/**
+ * @param n
+ * @returns {boolean}
+ * 判断关键：如果是快乐数，那么在循环过程中必然会出现重复元素
+ */
+const isHappy = n => {
+  // 创建集合来存储已经出现过的元素
+  const set = new Set()
+  // 计算下一轮循环的结果
+  const nextNumber = number => {
+    let sum = 0
+    while (number > 0) {
+      const currentDigit = number % 10
+      sum += currentDigit * currentDigit
+      number = Math.floor(number / 10)
+    }
+    return sum
+  }
+  // 开始循环，循环条件注意：
+  // 两个条件必须都要满足
+  // 首先n不是1，如果是1，那么肯定是快乐数，直接跳出循环
+  // 并且不能是set中已经有的数据，一旦出现循环，说明就不是快乐数
+  while (n !== 1 && !set.has(n)) {
+    set.add(n)
+    n = nextNumber(n)
+  }
+  return n === 1
+};
+
+// 217 存在重复元素
+const containsDuplicate = nums => {
+  const set = new Set()
+  for (let item of nums) {
+    if (!set.has(item)) {
+      set.add(item)
+    } else {
+      return true
+    }
+  }
+  return false
+};
+
+// 268 丢失的数字
+/**
+ * @param nums
+ * @returns {number}
+ * 将数组转换为集合操作，集合查找数据的时间复杂度是O(1)
+ */
+const missingNumber = nums => {
+  const len = nums.length, set = new Set(nums)
+  for (let i = 0; i <= len; i++) {
+    if (!set.has(i)) return i
+  }
+};
+
+// 326 3的幂
+/**
+ * @param n
+ * @returns {boolean}
+ * 如果是3的幂，那么就可以一直被3整除直到最后是1
+ */
+const isPowerOfThree = n => {
+  if (n <= 0) return false
+  while (n > 1) {
+    // n大于1的时候，一直除以3，直到n小于等于1时，跳出循环
+    n = n / 3
+  }
+  // 判断跳出循环之后n是不是1，如果是，那么n就是3的，否则就不是
+  return n === 1
+};
+
+// 344 反转字符串
+const reverseString = s => {
+  const len = s.length
+  if (len === 1) return s
+  for (let i = 0; i < Math.floor(len / 2); i++) {
+    [s[i], s[len - 1 - i]] = [s[len - 1 - i], s[i]]
+  }
+  return s
+};
+
+// 350 两个数组的交集
+const intersect = (nums1, nums2) => {
+  const res = [], map = new Map()
+  for (let item of nums1) {
+    map.set(item, (map.get(item) || 0) + 1)
+  }
+  for (let item of nums2) {
+    if (map.get(item) > 0) {
+      res.push(item)
+      map.set(item, map.get(item) - 1)
+    }
+  }
+  return res
+};
+
+// 387 字符串中的第一个唯一字符
+const firstUniqChar = s => {
+  const len = s.length, map = new Map()
+  if (len === 1) return 0
+  for (let item of s) {
+    map.set(item, (map.get(item) || 0) + 1)
+  }
+  for (let i = 0; i < len; i++) {
+    if (map.get(s[i]) === 1) return i
+  }
+  return -1
+};
+
+// 412 Fizz Buzz
+const fizzBuzz = n => {
+  const res = []
+  for (let i = 1; i <= n; i++) {
+    if (i % 3 === 0 && i % 5 === 0) {
+      res.push('FizzBuzz')
+    } else if (i % 3 === 0) {
+      res.push('Fizz')
+    } else if (i % 5 === 0) {
+      res.push('Buzz')
+    } else {
+      res.push(i.toString())
+    }
+  }
+  return res
 };
