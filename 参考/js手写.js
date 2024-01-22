@@ -232,3 +232,51 @@ function sum(num) {
   func.valueOf = () => num;
   return func;
 }
+
+// promise.all
+const all = function (promises) {
+  const result = [], len = promises.length
+  let index = 0
+  // all接收一个promise的数组，返回值也是一个promise
+  return new Promise((resolve, reject) => {
+    for (let p of promises) {
+      // 对于每一个p，不一定是promise，所以需要用resolve进行包裹
+      Promise.resolve(p).then(function (res) {
+        result[index] = res
+        index++
+        if (result.length === len) return resolve(result)
+      }, function (error) {
+        return reject(error)
+      })
+    }
+  })
+}
+
+// promise.race
+const race = function (promises) {
+  return new Promise((resolve, reject) => {
+    for (let p of promises) {
+      Promise.resolve(p).then(function (res) {
+        return resolve(res)
+      }, function (error) {
+        return reject(error)
+      })
+    }
+  })
+}
+
+// 测试
+const p1 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 100, 'p1')
+})
+const p2 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 500, 'p2')
+})
+const p3 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 1000, 'p3')
+})
+console.log('all测试')
+all([p1, p2, p3]).then(res => console.log(res))  // [p1,p2,p3]
+
+console.log('race测试')
+race([p1, p2, p3]).then(res => console.log(res))  // p1

@@ -236,7 +236,7 @@ class EventBus {
 /**
  * Promise.all
  */
-const myAll = function (pArr) {
+const all = function (pArr) {
   const result = [], len = pArr.length
   let index = 0
   return new Promise(function (resolve, reject) {
@@ -255,7 +255,7 @@ const myAll = function (pArr) {
 /**
  * Promise.race
  */
-const myRace = function (pArr) {
+const race = function (pArr) {
   return new Promise(function (resolve, reject) {
     for (let p of pArr) {
       Promise.resolve(p).then(function (res) {
@@ -278,7 +278,7 @@ const p3 = new Promise((resolve, reject) => {
 })
 
 console.log('all测试')
-myAll([p1, p2, p3]).then(res => console.log(res))  // p1
+all([p1, p2, p3]).then(res => console.log(res))  // [p1,p2,p3]
 
 console.log('race测试')
-myRace([p1, p2, p3]).then(res => console.log(res))  // [p1,p2,p3]
+race([p1, p2, p3]).then(res => console.log(res))  // p1

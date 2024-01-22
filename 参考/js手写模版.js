@@ -77,3 +77,11 @@ const arrUnique2 = arr => {
 }
 const arrUnique3 = arr => {
 }
+
+// promise.all
+const all = function (promises) {
+}
+
+// promise.race
+const race = function (promises) {
+}

@@ -1209,3 +1209,41 @@ const isValidSudoku = board => {
   }
   return true
 };
+
+// 165 版本号对比
+/**
+ * @param version1
+ * @param version2
+ * @returns {number}
+ * 将两个版本号转换为数组，然后逐个进行对比，有不一致的立刻返回-1
+ */
+const compareVersion = (version1, version2) => {
+  const version1Arr = version1.split('.'), version2Arr = version2.split('.')
+  const version1Len = version1Arr.length, version2Len = version2Arr.length
+  let index = 0
+  while (index < version1Arr.length || index < version2Arr.length) {
+    const x = version1Arr[index] ? +version1Arr[index] : 0
+    const y = version2Arr[index] ? +version2Arr[index] : 0
+    if (x < y) {
+      return -1
+    } else if (x > y) {
+      return 1
+    } else {
+      index++
+    }
+  }
+  return 0
+};
+
+// 8 字符串转换整数
+const myAtoi = s => {
+  // 注意这个parseInt的使用
+  const number = parseInt(s, 10)
+  if (isNaN(number)) {
+    return 0
+  } else if (number < -(2 ** 31) || number > 2 ** 31 - 1) {
+    return number < -(2 ** 31) ? -(2 ** 31) : 2 ** 31 - 1
+  } else {
+    return number
+  }
+};
