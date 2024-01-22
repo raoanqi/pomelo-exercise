@@ -17,3 +17,8 @@ const binarySearch = (arr, target) => {
   }
   return -1
 }
+
+// KMP算法：用于字符串的模式匹配
+const kmpSearch = (str, pattern) => {
+
+}

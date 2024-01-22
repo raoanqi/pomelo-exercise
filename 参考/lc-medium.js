@@ -1163,3 +1163,49 @@ var partition = function (head, x) {
   current1.next = dummy2.next
   return dummy1.next
 };
+
+// 7 整数反转
+const reverse = x => {
+  const flag = x < 0 ? -1 : 1
+  const temp = flag < 0 ? x.toString().slice(1) : x.toString()
+  const res = flag < 0 ? Number(temp.split('').reverse().join('')) * -1 : Number(temp.split('').reverse().join(''))
+  return (res >= -Math.pow(2, 31) && res <= Math.pow(2, 31) - 1) ? res : 0
+};
+
+// 36 有效数独
+const isValidSudoku = board => {
+  const rows = Array.from({length: 9}, () => new Set())
+  const columns = Array.from({length: 9}, () => new Set())
+  const boxes = Array.from({length: 9}, () => new Set())
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      const currentNumber = board[i][j]
+      //  如果是空白格，直接跳过
+      if (currentNumber === '.') continue
+
+      // 检查行
+      // 如果当前这一行rows[i]中已经包含了当前循环的这个元素currentNumber，那么直接返回false
+      if (rows[i].has(currentNumber)) return false
+      // 如果当前这一行rows[i]中没有包含这个元素，那么就添加进去
+      rows[i].add(currentNumber)
+
+      // 检查列
+      // 如果当前这一列columns[j]中已经包含了当前循环的元素，直接返回false
+      if (columns[j].has(currentNumber)) return false
+      // 否则就添加进去
+      columns[j].add(currentNumber)
+
+      // 检查子数组
+      /**
+       * @type {number}
+       * 注意这个计算子数独索引的方式
+       * 整个数独按照从左到右，从上到下的方式，一共会被划分为9个子数独，索引分别为0-8
+       * 计算当前这个小格子处于哪一个子数独可以用Math.floor(i / 3) * 3 + Math.floor(j / 3)计算得到
+       */
+      const boxIndex = Math.floor(i / 3) * 3 + Math.floor(j / 3)
+      if (boxes[boxIndex].has(currentNumber)) return false
+      boxes[boxIndex].add(currentNumber)
+    }
+  }
+  return true
+};

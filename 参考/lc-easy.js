@@ -374,20 +374,38 @@ var plusOne = function (digits) {
   return [1, ...digits]
 };
 
-// 找出字符串中第一个匹配的下标
-var strStr = function (haystack, needle) {
-  const haystackLen = haystack.length
-  const needleLen = needle.length
-  if (!needleLen) return 0
-  if (needleLen > haystackLen) return -1
-  /**
-   * for循环中需要考虑到二者相等的情况，所以判断条件需要加上等于，否则当二者长度相等时，for循环直接退出了
-   */
-  for (let i = 0; i <= haystackLen - needleLen; i++) {
-    if (haystack.substring(i, i + needleLen) === needle) return i
+// 28 找出字符串中第一个匹配的下标
+const strStr = (haystack, needle) => {
+  const len = haystack.length, needleLen = needle.length;
+  if (needleLen === 0) return 0
+  let i = 0
+  let j = 0
+  // 开始遍历
+  while (i < len) {
+    /**
+     * 如果此时的两个串对应的元素相等，判断是否已经遍历到了needle的最后一位
+     * 如果是，那么主串中起始的索引就是i-needleLen+1
+     * 如果子串还没有遍历完，那么两个串分别向后移动
+     */
+    if (haystack[i] === needle[j]) {
+      if (j === needleLen - 1) return i - needleLen + 1;
+      i++;
+      j++;
+    } else {
+      // i-j：将 i 移动到上一个匹配点之后的位置
+      /**
+       * @type {number}
+       * 如果两个不相等
+       * 说明主串中的位置需要重新设置，之前设置的起始位置不对
+       * 将主串的起始位置往后推一个，就是i-j+1
+       * 另外，子串的位置要归零开始重新遍历，就是j=0
+       */
+      i = i - j + 1;
+      j = 0;
+    }
   }
+  // 遍历完还没找到，就是-1
   return -1
-
 };
 // 验证回文串
 var isPalindrome = function (str) {
