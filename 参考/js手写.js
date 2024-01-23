@@ -265,6 +265,25 @@ const race = function (promises) {
   })
 }
 
+// promise.allSettled
+/**
+ * @param promises
+ * @returns {Promise<Awaited<unknown>[]>}
+ * promise.all中只要有任何一个promise是reject。整个promise就会立刻变为reject状态，只有全部promise都resolve，才会执行.then中的成功的回调
+ * promise.allSettled中会等到全部的promise都变为最终状态才会返回
+ */
+const allSettled = function (promises) {
+  return Promise.all(promises.map(p => Promise.resolve(p).then(value => ({
+    status: 'fulfilled',
+    value
+  })).catch(reason => ({status: 'rejected', reason}))))
+}
+
+// promise.any
+const any = function (promises) {
+
+}
+
 // 测试
 const p1 = new Promise((resolve, reject) => {
   setTimeout(resolve, 100, 'p1')
@@ -280,3 +299,8 @@ all([p1, p2, p3]).then(res => console.log(res))  // [p1,p2,p3]
 
 console.log('race测试')
 race([p1, p2, p3]).then(res => console.log(res))  // p1
+
+
+// Object.create
+
+// Object.assign

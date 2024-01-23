@@ -1247,3 +1247,64 @@ const myAtoi = s => {
     return number
   }
 };
+
+// 38 外观数列
+/**
+ * @param n
+ * @returns {string}
+ * 时间复杂度：O(m*n)，m为字符串的平均长度，n就是题目的输入参数
+ * 空间复杂度：O(m)，m是字符串的平均长度，就是temp在循环过程中占用的
+ */
+const countAndSay = n => {
+  // res记录计算中的每一项，初始化时就是’1‘
+  let res = '1'
+  // 开始循环
+  for (let i = 1; i < n; i++) {
+    // temp用于在每一轮计算中保存当前轮的计算结果，因此初始化就是''
+    // count用于计算内部相同字符的数量，因此初始化就是1
+    let temp = '', count = 1
+    // 循环遍历n-1的计算结果，对其进行描述
+    for (let j = 0; j < res.length; j++) {
+      // 循环过程中，如果发现相等，count就自增
+      if (res[j] === res[j + 1]) {
+        count++
+      } else {
+        // 如果不相等，就把这一段的结果追加到temp字符串上
+        // 这里注意是count+res[j]，而不是count+res[j+1]，因为如果不相等，那么res[j+1]实际上已经是下一个不相等的元素了
+        temp += count + res[j]
+        // 找到一串相等的字符之后，并将计数器count重置为1
+        count = 1
+      }
+    }
+    // 将当前一轮的计算结果赋值给res，供下一轮进行计算
+    res = temp
+  }
+  return res
+};
+
+// 50 Pow(x,n)
+/**
+ * @param x
+ * @param n
+ * @returns {number}
+ * 时间复杂度：O(logn)
+ */
+const myPow = (x, n) => {
+  // 对于等于1的特殊情况
+  if (n === 0 || x === 1 || (x === -1 && n % 2 === 0)) return 1
+  // 对于等于-1的特殊情况
+  if (x === -1 && n % 2 === -1) return -1
+  // 如果n小于0，可以转换为计算1/x的-n次方
+  if (n < 0) {
+    x = 1 / x
+    n = -n
+  }
+  let res = 1
+  while (n > 0) {
+    // 如果n是奇数，先单独计算一次，这样n-1就是偶数了，就可以使用快速算法进行计算，例如x^2,x^4,x^8
+    if (n % 2 === 1) res *= x
+    x *= x
+    n = Math.floor(n / 2)
+  }
+  return res
+};
