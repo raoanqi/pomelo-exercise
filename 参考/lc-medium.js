@@ -1308,3 +1308,92 @@ const myPow = (x, n) => {
   }
   return res
 };
+
+// 166 分数到小数
+/**
+ * @param numerator
+ * @param denominator
+ * @returns {string}
+ * 请注意一个数学特性，分数属于有理数，而有理数即使出现循环也一定是循环小数
+ * 而无线不循环小数是无理数，与本题不符，所以本题不用考虑无限不循环小数
+ * 也就是说，本题的计算结果要么是可以整数，要么是有限小数，要么是无限循环小数
+ */
+const fractionToDecimal = (numerator, denominator) => {
+  // 如果分子是0，直接返回0
+  if (numerator === 0) return '0'
+  let res = ''
+  // tips：按位异或可以计算乘除的符号
+  res += (numerator > 0) ^ (denominator > 0) ? '-' : ''
+  // 取绝对值
+  numerator = Math.abs(numerator)
+  denominator = Math.abs(denominator)
+  // 计算整数部分
+  res += Math.floor(numerator / denominator)
+  // 计算余数，如果余数为0，说明能够整除，所以直接返回res
+  let remainder = numerator % denominator
+  if (remainder === 0) return res
+  // 如果余数不是0，说明存在小数部分，先给res加上.
+  res += '.'
+  // 创建map，存储余数出现的位置
+  const map = new Map()
+  // 只要余数不为0，就一直循环
+  while (remainder !== 0) {
+    /**
+     * 如果map中已经存在了这个余数，说明发现了循环小数
+     */
+    if (map.has(remainder)) {
+      res = res.substring(0, map.get(remainder)) + '(' + res.substring(map.get(remainder)) + ')'
+      break
+    }
+    /**
+     * 记录当前余数出现时，res的长度
+     */
+    map.set(remainder, res.length)
+    /**
+     * 余数乘以10，是为了直接计算出余数的数
+     * 例如：余数为2，分母为3，如果不乘以10直接计算，就是0.6666，这样与之前的res不好拼接
+     * 但是2乘以10之后，20/3=6.6666，res直接拼接Math.floor的结果就可以，简化了计算
+     */
+    remainder *= 10
+    res += Math.floor(remainder / denominator)
+    remainder %= denominator
+  }
+  return res
+};
+
+
+// 172 阶乘后的零
+/**
+ * @param n
+ * @returns {number}
+ * 在尾部有一个0，说明可以被10除掉一次，在尾部有两个0，说明可以被10除掉2次
+ * 因此尾部0的个数实际上是由阶乘中出现10的次数决定的，在1-9的算子中，可以计算得到10的只有2*5
+ * 而在阶乘的过程中，5的任意倍数与2的任意倍数相乘必然会得到10的倍数，但是也要注意到在阶乘过程中
+ * 2的倍数的出现次数比5的倍数的出现次数要多，所以直接计算阶乘中有多少个5的倍数就行
+ * 时间复杂度：O(log5^n)
+ */
+const trailingZeroes = n => {
+  let count = 0
+  while (n > 0) {
+    /**
+     * @type {number}
+     * 每次直接除以5，说明n到Math.floor(n/5之间)有多少个5的倍数，然后叠加
+     */
+    n = Math.floor(n / 5)
+    count += n
+  }
+  return count
+};
+
+
+// 179 最大数
+const largestNumber = nums => {
+  nums.sort((a, b) => {
+    const strA = a.toString()
+    const strB = b.toString()
+    return (strB + strA) - (strA + strB)
+  })
+  const res = nums.join('')
+  // 有可能输入是[0,0]，这样会得到00的输出，因此要判断res开头是不是0，如果是0，那么直接返回0
+  return res[0] === '0' ? '0' : res
+};
