@@ -1387,6 +1387,7 @@ const trailingZeroes = n => {
 
 
 // 179 最大数
+// todo：其中的排序需要继续研究
 const largestNumber = nums => {
   nums.sort((a, b) => {
     const strA = a.toString()
@@ -1396,4 +1397,39 @@ const largestNumber = nums => {
   const res = nums.join('')
   // 有可能输入是[0,0]，这样会得到00的输出，因此要判断res开头是不是0，如果是0，那么直接返回0
   return res[0] === '0' ? '0' : res
+};
+
+// 54 螺旋数组
+/**
+ * @param matrix
+ * @returns {*[]}
+ * 按照从左到右，从上到下，从右到左，从下到上的顺序进行循环
+ * 请注意，在每一轮while中，matrix的length都在不断变化
+ * 时间复杂度：O(m*n)：一共需要遍历的元素就是整个矩阵中的元素，也就是m*n
+ */
+const spiralOrder = matrix => {
+  const res = []
+  while (matrix.length > 0) {
+    /**
+     * 从左到右
+     */
+    res.push(...matrix.shift())
+    /**
+     * 从上到下
+     */
+    for (let i = 0; i < matrix.length; i++) {
+      if (matrix[i].length > 0) res.push(matrix[i].pop())
+    }
+    /**
+     * 从右向左
+     */
+    if (matrix.length > 0) res.push(...matrix.pop().reverse())
+    /**
+     * 从下到上
+     */
+    for (let i = matrix.length - 1; i >= 0; i--) {
+      if (matrix[i].length > 0) res.push(matrix[i].shift())
+    }
+  }
+  return res
 };
