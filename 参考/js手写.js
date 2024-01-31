@@ -239,6 +239,8 @@ const all = function (promises) {
   let index = 0
   // all接收一个promise的数组，返回值也是一个promise
   return new Promise((resolve, reject) => {
+    // 如果接收到一个空数组，直接resolve([])，不要处理
+    if (len === 0) return resolve([])
     for (let p of promises) {
       // 对于每一个p，不一定是promise，所以需要用resolve进行包裹
       Promise.resolve(p).then(function (res) {

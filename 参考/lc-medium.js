@@ -1433,3 +1433,103 @@ const spiralOrder = matrix => {
   }
   return res
 };
+
+// 73 矩阵置零
+/**
+ * @param matrix
+ * 时间复杂度：O(m*n)
+ * 空间复杂度：O(m+n)
+ */
+const setZeroes = matrix => {
+  const m = matrix.length, n = matrix[0].length
+  // 分别创建两个数组，长度为m，n，初始化时全部填充0
+  const rows = new Array(m).fill(0)
+  const cols = new Array(n).fill(0)
+  // 遍历整个矩阵，遇到为0的元素，就将上述数组中对应的数字置为1
+  // rows[i]为1代表矩阵的第i行都应该置零
+  // cols[j]为1代表矩阵的第j列都应该置零
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      if (matrix[i][j] === 0) {
+        rows[i] = 1
+        cols[j] = 1
+      }
+    }
+  }
+  // 重新遍历一遍矩阵，开始置零
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      // 如果中间遇到rows[i]或者cols[j]为0的，那么就说明当前matrix[i][j]元素处于需要置零的行或者列上，因此进行置零
+      if (rows[i] === 1 || cols[j] === 1) {
+        matrix[i][j] = 0
+      }
+    }
+  }
+};
+
+// 162 寻找峰值
+/**
+ * @param nums
+ * @returns {number}
+ * 时间复杂度：O(logn)
+ */
+const findPeakElement = nums => {
+  // 初始化二分查找的左右指针
+  let left = 0, right = nums.length - 1
+  // 左右指针在循环过程中不断向中间移动，相遇时返回left或者right就是找到的峰值
+  while (left < right) {
+    const mid = Math.floor((left + right) / 2)
+    /**
+     * 如果nums[mid]<nums[mid+1]，说明峰值在mid右边，所以left更新为mid+1
+     * 如果nums[mid]>nums[mid+1]，说明峰值在mid本身或者mid左边，所以right更新为mid
+     * 如果nums[mid]=nums[mid+1]，则无法判断，这个时候其实往两边搜索都可以
+     */
+    if (nums[mid] < nums[mid + 1]) {
+      left = mid + 1
+    } else if (nums[mid] > nums[mid + 1]) {
+      right = mid
+    } else {
+      /**
+       * @type {number}
+       * 此时为nums[mid]=nums[mid+1]，往两边搜索都可以
+       * 如果往右边搜索，那么峰值肯定出现在mid右边，所以更新left为mid+1
+       * 如果往左边搜索，那么峰值肯定出现在mid左边，所以更新right为mid-1
+       * 这两种都可以
+       */
+      // left = mid + 1
+      right = mid - 1
+    }
+  }
+  return left
+};
+
+// 204 计数质数
+/**
+ * @param n
+ * @returns {number}
+ * 时间复杂度：O(nlog(logn))
+ */
+const countPrimes = n => {
+  // n不大于2，直接返回0，不存在质数
+  if (n <= 2) return 0
+  // 初始化一个长度为n的数组，每一项均初始化为true，后续在迭代中逐个判断每一项的值是否需要修改
+  const isPrime = new Array(n).fill(true)
+  // 数组的第0,1项分别代表数字0,1，这两个都不是质数，因此设置为false
+  isPrime[0] = false
+  isPrime[1] = false
+  // 从数字2开始判断，一直到n-1，判断其中有多少质数
+  for (let i = 2; i < n; i++) {
+    /**
+     * 如果一个数不是质数，那么不用管，直接跳过
+     * 如果一个数是质数，那么这个质数的2倍，3倍，。。。都不会是质数，因为可以被2,3，。。。整除
+     * 所以这部分的对应的数组项全部更新为false
+     * 循环结束之后，数组中剩下true的数量，就是要求的质数的数量
+     */
+    if (isPrime[i]) {
+      for (let j = 2 * i; j < n; j += i) {
+        isPrime[j] = false
+      }
+    }
+  }
+  return isPrime.filter(item => item).length
+};
