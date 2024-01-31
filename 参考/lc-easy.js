@@ -842,3 +842,30 @@ const fizzBuzz = n => {
   }
   return res
 };
+
+// 278 第一个错误的版本
+/**
+ * @param isBadVersion
+ * @returns {function(*): number}
+ * 采用二分查找
+ * 时间复杂度：O(logn)
+ */
+const solution = isBadVersion => {
+      /**
+       * @param {integer} n Total versions
+       * @return {integer} The first bad version
+       */
+      return function (n) {
+        let left = 1, right = n
+        while (left < right) {
+          let mid = Math.floor((left + right) / 2)
+          if (isBadVersion(mid)) {
+            right = mid
+          } else {
+            left = mid + 1
+          }
+        }
+        return left
+      };
+    }
+;

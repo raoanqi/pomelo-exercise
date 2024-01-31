@@ -1533,3 +1533,49 @@ const countPrimes = n => {
   }
   return isPrime.filter(item => item).length
 };
+
+// 237 删除链表中的节点
+/**
+ * @param node
+ * 时间复杂度：O(1)，操作一个元素即可
+ */
+const deleteNode = node => {
+  /**
+   * 删除node这个链表节点，可以采用这种思路：
+   * 将node的val替换为node的下一个元素的val
+   * 然后将node的next指向node的下一个元素的next
+   * 总体来说，相当于是将node改造为了node的下一个元素，这样就等价于删除了node元素本身
+   * 因为是单向链表，所以无法通过将node的上一个元素的next指向node.next实现删除
+   */
+  node.val = node.next.val
+  node.next = node.next.next
+};
+
+// 328 奇偶链表
+/**
+ * @param head
+ * @returns {{next}|*}
+ * 时间复杂度：O(n)，空间复杂度为常数空间O(1)
+ */
+const oddEvenList = head => {
+  // 如果head为空，直接返回空即可
+  // 如果链表只有一个或者两个元素，那么也不用重新排序，直接返回即可
+  if (!head || !head.next || !head.next.next) return head
+  // 分别定义奇数链表和偶数链表的头节点
+  let oddHead = head, evenHead = head.next
+  // 分别定义奇数链表和偶数链表用于遍历的指针
+  let oddCurrent = head, evenCurrent = head.next
+  /**
+   * 开始循环
+   */
+  while (evenCurrent && evenCurrent.next) {
+    oddCurrent.next = evenCurrent.next
+    oddCurrent = oddCurrent.next
+    evenCurrent.next = oddCurrent.next
+    evenCurrent = evenCurrent.next
+  }
+  // 循环结束之后奇数链表和偶数链表就已经都生成了，将偶数链表追加到奇数链表之后
+  oddCurrent.next = evenHead
+  // 然后返回整个链表的头节点，就是奇数链表的头即可
+  return oddHead
+};
