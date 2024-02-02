@@ -283,7 +283,18 @@ const allSettled = function (promises) {
 
 // promise.any
 const any = function (promises) {
-
+  return new Promise((resolve, reject) => {
+    promises = Array.isArray(promises) ? promises : []
+    let index = promises.length
+    const errs = []
+    promises.forEach(p => {
+      Promise.resolve(p).then(value => resolve(value), err => {
+        index--
+        errs.push(err)
+        if (index === 0) return reject(new AggregateError(errs))
+      })
+    })
+  })
 }
 
 // 测试
