@@ -650,6 +650,98 @@ const trap = height => {
   return res
 };
 
+/**
+ * 前缀和数组类型题目
+ */
+// 303 区域和检索，这是一道一维数组前缀和
+/**
+ * @param nums
+ * @constructor
+ * 先计算前缀和，然后快速求和
+ * 时间复杂度O(n)
+ */
+var NumArray = function (nums) {
+  const len = nums.length
+  this.preSum = new Array(len + 1)
+  this.preSum[0] = 0
+  for (let i = 1; i <= len; i++) {
+    this.preSum[i] = this.preSum[i - 1] + nums[i - 1]
+  }
+};
+
+NumArray.prototype.sumRange = function (left, right) {
+  return this.preSum[right + 1] - this.preSum[left]
+};
+
+// 304 二维区域和检索，这是一道二维数组前缀和
+/**
+ * @param matrix
+ * @constructor
+ * 时间复杂度O(mn)，mn分别为矩阵的行数和列数
+ */
+var NumMatrix = function (matrix) {
+  const m = matrix.length, n = matrix[0].length
+  this.preSum = new Array(m + 1).fill(0).map(() => new Array(n + 1).fill(0))
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      this.preSum[i][j] = this.preSum[i - 1][j] + this.preSum[i][j - 1] + matrix[i - 1][j - 1] - this.preSum[i - 1][j - 1]
+    }
+  }
+};
+
+NumMatrix.prototype.sumRegion = function (row1, col1, row2, col2) {
+  return this.preSum[row2 + 1][col2 + 1] - this.preSum[row1][col2 + 1] - this.preSum[row2 + 1][col1] + this.preSum[row1][col1]
+};
+
+/**
+ * 差分数组类型题目
+ */
+// 1094 拼车
+/**
+ * @param {number[][]} trips
+ * @param {number} capacity
+ * @return {boolean}
+ * 时间复杂度O(n)，n为trips的长度
+ */
+var carPooling = function (trips, capacity) {
+  // 构建差分数组
+  const diff = new Array(1001).fill(0)
+  for (const [num, from, to] of trips) {
+    diff[from] += num
+    diff[to] -= num
+  }
+  // 使用循环，模拟车辆循环过程中上下客，如果中途超过了capacity容量，就直接返回false
+  let temp = 0
+  for (const item of diff) {
+    temp += item
+    if (temp > capacity) return false
+  }
+  // 如果循环顺利结束，就代表全程不会超载，返回true
+  return true
+};
+
+// 1109 航班预定统计
+/**
+ * @param {number[][]} bookings
+ * @param {number} n
+ * @return {number[]}
+ * 时间复杂度：O(m+n)，其中m是bookings的长度，另外n是后面遍历构建结果res的时间复杂度
+ */
+var corpFlightBookings = function (bookings, n) {
+  // 构建差分数组
+  const diff = new Array(n + 1).fill(0)
+  for (const [first, last, seat] of bookings) {
+    diff[first - 1] += seat
+    diff[last] -= seat
+  }
+  const res = []
+  let temp = 0
+  for (let i = 0; i < n; i++) {
+    temp += diff[i]
+    res[i] = temp
+  }
+  return res
+};
 
 
 
