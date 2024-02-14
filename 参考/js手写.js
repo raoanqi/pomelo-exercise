@@ -1,26 +1,28 @@
 // apply
-Function.prototype.myApply = function (context, args) {
+Function.prototype.myApply = function(context, args) {
   if (typeof this !== 'function') throw new Error('不是函数')
   if (!Array.isArray(args)) throw new Error('不是数组')
-  context = context || window
-  context.fn = this
+  context = Object(context || window)
+  const func = Symbol()
+  context[func] = this
   const res = context.fn(...args)
   delete context.fn
   return res
 }
 
 // call
-Function.prototype.myCall = function (context, ...args) {
+Function.prototype.myCall = function(context, ...args) {
   if (typeof this !== 'function') throw new Error('不是函数')
-  context = context || window
-  context.fn = this
-  const res = context.fn(...args)
-  delete context.fn
+  context = Object(context || window)
+  const func = Symbol()
+  context[func] = this
+  const res = context[func](...args)
+  delete context[func]
   return res
 }
 
 // bind
-Function.prototype.myBind = function (context, ...args) {
+Function.prototype.myBind = function(context, ...args) {
   if (typeof this !== 'function') throw new Error('不是函数')
   const that = this
   return function F(...newArgs) {
@@ -30,18 +32,17 @@ Function.prototype.myBind = function (context, ...args) {
 }
 
 // instanceof
-const myInstanceof = function (obj, fn) {
-  obj = obj.__proto__
-  const fnPrototype = fn.prototype
-  while (true) {
-    if (obj === fnPrototype) return true
-    if (obj === null || fnPrototype === undefined) return false
+const myInstanceof = function(obj, fn) {
+  if (obj === null || typeof obj !== 'object') return false
+  while (obj) {
+    if (obj.__proto__ === fn.prototype) return true
     obj = obj.__proto__
   }
+  return false
 }
 
 // new
-const myNew = function (fn, ...args) {
+const myNew = function(fn, ...args) {
   if (typeof fn !== 'function') throw new Error('不是函数')
   let obj = {}
   obj.__proto__ = fn.prototype
@@ -50,18 +51,18 @@ const myNew = function (fn, ...args) {
 }
 
 // debounce
-const debounce = function (fn, delay) {
+const debounce = function(fn, delay) {
   let timer
-  return function () {
+  return function() {
     clearTimeout(timer)
     timer = setTimeout(() => fn.apply(this, arguments), delay)
   }
 }
 
 // throttle
-const throttle = function (fn, delay) {
+const throttle = function(fn, delay) {
   let startTime = 0
-  return function () {
+  return function() {
     const nowTime = +new Date()
     if (nowTime - startTime > delay) {
       startTime = nowTime
@@ -71,7 +72,7 @@ const throttle = function (fn, delay) {
 }
 
 // flat
-Array.prototype.myFlat = function (level = 1) {
+Array.prototype.myFlat = function(level = 1) {
   if (!Array.isArray(this)) throw new Error('不是数组')
   if (typeof level !== 'number' || level <= 0) return this
   let that = this
@@ -83,7 +84,7 @@ Array.prototype.myFlat = function (level = 1) {
 }
 
 // reduce
-Array.prototype.myReduce = function (fn, initValue) {
+Array.prototype.myReduce = function(fn, initValue) {
   if (!Array.isArray(this)) throw new Error('不是数组')
   if (typeof fn !== 'function') throw new Error('fn不是函数')
   const len = this.length
@@ -97,12 +98,12 @@ Array.prototype.myReduce = function (fn, initValue) {
 }
 
 // curry
-const curry = function (fn) {
+const curry = function(fn) {
   return function curried(...args) {
     if (args.length >= fn.length) {
       return fn.apply(this, args)
     } else {
-      return function (...newArgs) {
+      return function(...newArgs) {
         return curried.apply(this, args.concat(newArgs))
       }
     }
@@ -110,7 +111,7 @@ const curry = function (fn) {
 }
 
 // 深拷贝
-const deepClone = function (target) {
+const deepClone = function(target) {
   if (typeof target !== 'object' || target === null) return target
   let res
   if (Array.isArray(target)) {
@@ -206,7 +207,7 @@ const shuffle = arr => {
 // 实现一个composition方法(bfe 11)
 // todo
 const pipe = funcs => {
-  return function (arg) {
+  return function(arg) {
     return funcs.reduce((result, func) => {
       return func.call(this, result)
     }, arg)
@@ -225,16 +226,16 @@ const pipe = funcs => {
  */
 
 function sum(num) {
-  const func = function (num2) {
-    return num2 ? sum(num + num2) : num;
+  const func = function(num2) {
+    return num2 ? sum(num + num2) : num
   }
 
-  func.valueOf = () => num;
-  return func;
+  func.valueOf = () => num
+  return func
 }
 
 // promise.all
-const all = function (promises) {
+const all = function(promises) {
   const result = [], len = promises.length
   let index = 0
   // all接收一个promise的数组，返回值也是一个promise
@@ -243,11 +244,11 @@ const all = function (promises) {
     if (len === 0) return resolve([])
     for (let p of promises) {
       // 对于每一个p，不一定是promise，所以需要用resolve进行包裹
-      Promise.resolve(p).then(function (res) {
+      Promise.resolve(p).then(function(res) {
         result[index] = res
         index++
         if (result.length === len) return resolve(result)
-      }, function (error) {
+      }, function(error) {
         return reject(error)
       })
     }
@@ -255,12 +256,12 @@ const all = function (promises) {
 }
 
 // promise.race
-const race = function (promises) {
+const race = function(promises) {
   return new Promise((resolve, reject) => {
     for (let p of promises) {
-      Promise.resolve(p).then(function (res) {
+      Promise.resolve(p).then(function(res) {
         return resolve(res)
-      }, function (error) {
+      }, function(error) {
         return reject(error)
       })
     }
@@ -274,25 +275,30 @@ const race = function (promises) {
  * promise.all中只要有任何一个promise是reject。整个promise就会立刻变为reject状态，只有全部promise都resolve，才会执行.then中的成功的回调
  * promise.allSettled中会等到全部的promise都变为最终状态才会返回
  */
-const allSettled = function (promises) {
+const allSettled = function(promises) {
   return Promise.all(promises.map(p => Promise.resolve(p).then(value => ({
     status: 'fulfilled',
     value
-  })).catch(reason => ({status: 'rejected', reason}))))
+  })).catch(reason => ({ status: 'rejected', reason }))))
 }
 
 // promise.any
-const any = function (promises) {
+const any = function(promises) {
   return new Promise((resolve, reject) => {
-    promises = Array.isArray(promises) ? promises : []
-    let index = promises.length
-    const errs = []
-    promises.forEach(p => {
-      Promise.resolve(p).then(value => resolve(value), err => {
-        index--
-        errs.push(err)
-        if (index === 0) return reject(new AggregateError(errs))
-      })
+    const errors = []
+    promises.forEach((promise, index) => {
+      promise.then(
+        (data) => {
+          return resolve(data)
+        },
+        (error) => {
+          errors[index] = error
+
+          if (errors.length === promises.length) {
+            reject(new AggregateError(errors))
+          }
+        }
+      )
     })
   })
 }
@@ -317,3 +323,103 @@ race([p1, p2, p3]).then(res => console.log(res))  // p1
 // Object.create
 
 // Object.assign
+
+// JSON.stringify
+// 关键在于各个表边界条件的控制
+function stringify(data) {
+  // your code here
+  if (typeof data === 'bigint') {
+    throw new Error('Do not know how to serialize a BigInt at JSON.stringify')
+  }
+  if (typeof data === 'string') {
+    return `"${data}"`
+  }
+  if (typeof data === 'function') {
+    return undefined
+  }
+  if (data !== data) {
+    return 'null'
+  }
+  if (data === Infinity) {
+    return 'null'
+  }
+  if (data === -Infinity) {
+    return 'null'
+  }
+  if (typeof data === 'number') {
+    return `${data}`
+  }
+  if (typeof data === 'boolean') {
+    return `${data}`
+  }
+  if (data === null) {
+    return 'null'
+  }
+  if (data === undefined) {
+    return 'null'
+  }
+  if (typeof data === 'symbol') {
+    return 'null'
+  }
+  if (data instanceof Date) {
+    return `"${data.toISOString()}"`
+  }
+  if (Array.isArray(data)) {
+    const arr = data.map((el) => stringify(el))
+    return `[${arr.join(',')}]`
+  }
+  if (typeof data === 'object') {
+    const arr = Object.entries(data).reduce((acc, [key, value]) => {
+      if (value === undefined) {
+        return acc
+      }
+      acc.push(`"${key}":${stringify(value)}`)
+      return acc
+    }, [])
+    return `{${arr.join(',')}}`
+  }
+}
+
+// JSON.parse
+// 关键在于各个表边界条件的控制
+function parse(str) {
+  if (str === '') {
+    throw Error()
+  }
+  if (str[0] === '\'') {
+    throw Error()
+  }
+  if (str === 'null') {
+    return null
+  }
+  if (str === '{}') {
+    return {}
+  }
+  if (str === '[]') {
+    return []
+  }
+  if (str === 'true') {
+    return true
+  }
+  if (str === 'false') {
+    return false
+  }
+  if (str[0] === '"') {
+    return str.slice(1, -1)
+  }
+  if (+str === +str) {
+    return Number(str)
+  }
+  if (str[0] === '{') {
+    return str.slice(1, -1).split(',').reduce((acc, item) => {
+      const index = item.indexOf(':')
+      const key = item.slice(0, index)
+      const value = item.slice(index + 1)
+      acc[parse(key)] = parse(value)
+      return acc
+    }, {})
+  }
+  if (str[0] === '[') {
+    return str.slice(1, -1).split(',').map((value) => parse(value))
+  }
+}

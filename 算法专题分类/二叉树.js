@@ -72,38 +72,38 @@ const mergeTrees = (root1, root2) => {
 }
 
 //相同的树
-var isSameTree = function (p, q) {
+var isSameTree = function(p, q) {
   const compareNode = (nodeA, nodeB) => {
     if (!nodeA && !nodeB) return true
     if ((!nodeA || !nodeB) || (nodeA.val !== nodeB.val)) return false
     return compareNode(nodeA.left, nodeB.left) && compareNode(nodeA.right, nodeB.right)
   }
   return compareNode(p, q)
-};
+}
 
 //路径总和
-var hasPathSum = function (root, targetSum) {
+var hasPathSum = function(root, targetSum) {
   // 如果当前的根节点为空，那么直接返回false
   if (!root) return false
   // 如果当前的根节点已经是叶子结点，那么就判断当前根节点的值是不是等于目标和
   if (!root.left && !root.right) return root.val === targetSum
   // 如果上面都不满足，那么就开始递归判断当前根节点的左右子树
   return hasPathSum(root.left, targetSum - root.val) || hasPathSum(root.right, targetSum - root.val)
-};
+}
 
 //完全二叉树的节点个数
-var countNodes = function (root) {
+var countNodes = function(root) {
   if (!root) return 0
   let leftHeight = 0, rightHeight = 0, left = root, right = root
   // 计算左子树的高度
   while (left) {
-    leftHeight++;
-    left = left.left;
+    leftHeight++
+    left = left.left
   }
   // 计算右子树的高度
   while (right) {
-    rightHeight++;
-    right = right.right;
+    rightHeight++
+    right = right.right
   }
   /**
    * 题目中说明，同一层中的元素不是满的，那么都会出现在树的左侧
@@ -111,12 +111,12 @@ var countNodes = function (root) {
    * 否则，就要递归进行计算
    */
   if (leftHeight === rightHeight) {
-    return Math.pow(2, leftHeight) - 1;
+    return Math.pow(2, leftHeight) - 1
   } else {
     // 如果不相等，递归计算左右子树的节点数
-    return 1 + countNodes(root.left) + countNodes(root.right);
+    return 1 + countNodes(root.left) + countNodes(root.right)
   }
-};
+}
 
 // 108 将有序数组转换为二叉搜索树
 const sortedArrayToBST = nums => {
@@ -140,7 +140,7 @@ const sortedArrayToBST = nums => {
     return root
   }
   return buildTree(0, nums.length - 1)
-};
+}
 
 // 不同的二叉搜索树
 const numTrees = n => {
@@ -258,7 +258,7 @@ const flatten = root => {
  * 因此采用while循环的方式来实现遍历，每遍历一个节点，k就会减去1，这样当k为0的时候，就是第k大的元素了
  * 时间复杂度：O(n)，因为最坏的情况下，需要访问全部n个节点才能得到答案
  */
-var kthSmallest = function (root, k) {
+var kthSmallest = function(root, k) {
   const stack = []
   while (root || stack.length) {
     while (root) {
@@ -270,6 +270,48 @@ var kthSmallest = function (root, k) {
     if (k === 0) return root.val
     root = root.right
   }
-};
+}
+
+// 树转数组
+const treeToArray = tree => {
+  const arr = []
+  const stack = [...tree]
+  while (stack.length) {
+    const node = stack.pop()
+    arr.push({
+      id: node.id,
+      name: node.name,
+      parentId: node.parentId
+    })
+    if (node?.children?.length) {
+      stack.push(...node.children.map(child => ({ ...child, parentId: node.id })))
+    }
+  }
+  return arr
+}
+const sourceTree = [
+  {
+    id: 1,
+    name: 'text1',
+    children: [
+      {
+        id: 2,
+        name: 'text2',
+        children: [
+          {
+            id: 4,
+            name: 'text4'
+          }
+        ]
+      },
+      {
+        id: 3,
+        name: 'text3'
+      }
+    ]
+  }
+]
+console.log('树转数组')
+console.log(treeToArray(sourceTree))
 
 

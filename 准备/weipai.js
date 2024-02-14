@@ -6,28 +6,28 @@
  * 代码输出
  */
 
-let num = 10;
+let num = 10
 let obj = {
   num: 20,
-  run: function () {
-    console.log(this.num);
-    this.num = 30;
-  },
-};
+  run: function() {
+    console.log(this.num)
+    this.num = 30
+  }
+}
 // 20
-obj.run();
-let run = obj.run;
+obj.run()
+let run = obj.run
 // undefined
-run();
+run()
 // 10
-console.log(num);
+console.log(num)
 // 30
-console.log(obj.num);
+console.log(obj.num)
 
 /**
  * 两数相加
  */
-const addTwoNumbers = function (l1, l2) {
+const addTwoNumbers = function(l1, l2) {
   if (!l1) return l2
   if (!l2) return l1
   const dummy = new ListNode(-1)
@@ -44,7 +44,7 @@ const addTwoNumbers = function (l1, l2) {
   }
   if (carry > 0) current.next = new ListNode(carry)
   return dummy.next
-};
+}
 
 /**
  * 给定一个整数n，表示有0,1,2,3,...,n的连续n+1个整数
@@ -75,7 +75,7 @@ const treeToArray = tree => {
       parentId: node.parentId
     })
     if (node?.children?.length) {
-      stack.push(...node.children.map(child => ({...child, parentId: node.id})))
+      stack.push(...node.children.map(child => ({ ...child, parentId: node.id })))
     }
   }
   return arr
@@ -110,31 +110,35 @@ console.log(treeToArray(sourceTree))
  */
 const arrayToTree = arr => {
   const map = new Map()
+  const tree = []
   for (let item of arr) {
     item.children = []
     map.set(item.id, item)
-  }
-  const tree = []
-  for (let item of arr) {
-    const {id, parentId} = item
-    if (parentId !== null) {
-      const parentNode = map.get(item.parentId)
-      if (parentId) parentNode.children.push(item)
+    const { parentId } = item
+    if (parentId !== undefined) {
+      const parentNode = map.get(parentId)
+      if (parentNode) {
+        parentNode.children.push(item)
+      } else {
+        // 如果父节点不存在，将当前节点直接添加到树的顶层
+        tree.push(item)
+      }
     } else {
+      // 如果没有父节点，将当前节点直接添加到树的顶层
       tree.push(item)
     }
   }
   return tree
 }
 const sourceArray = [
-  {id: 2, name: '部门B', parentId: null},
-  {id: 3, name: '部门C', parentId: 1},
-  {id: 1, name: '部门A', parentId: 2},
-  {id: 4, name: '部门D', parentId: 1},
-  {id: 5, name: '部门E', parentId: 2},
-  {id: 6, name: '部门F', parentId: 3},
-  {id: 7, name: '部门G', parentId: 2},
-  {id: 8, name: '部门H', parentId: 4}
+  { id: 2, name: '部门B', parentId: null },
+  { id: 3, name: '部门C', parentId: 1 },
+  { id: 1, name: '部门A', parentId: 2 },
+  { id: 4, name: '部门D', parentId: 1 },
+  { id: 5, name: '部门E', parentId: 2 },
+  { id: 6, name: '部门F', parentId: 3 },
+  { id: 7, name: '部门G', parentId: 2 },
+  { id: 8, name: '部门H', parentId: 4 }
 ]
 console.log('数组转为树')
 console.log(arrayToTree(sourceArray))
@@ -148,7 +152,7 @@ console.log('test', secondLargestNumber([2, 3, 3, 2, 4, 5]))   // 4
 /**
  * apply
  */
-Function.prototype.myApply = function (context, args) {
+Function.prototype.myApply = function(context, args) {
   if (typeof this !== 'function') throw new Error('不是函数')
   if (Array.isArray(args)) throw new Error('不是数组')
   context = context || window
@@ -161,7 +165,7 @@ Function.prototype.myApply = function (context, args) {
 /**
  * call
  */
-Function.prototype.myCall = function (context, ...args) {
+Function.prototype.myCall = function(context, ...args) {
   if (typeof this !== 'function') throw new Error('不是函数')
   context = context || window
   context.fn = this
@@ -173,7 +177,7 @@ Function.prototype.myCall = function (context, ...args) {
 /**
  * bind
  */
-Function.prototype.myBind = function (context, ...args) {
+Function.prototype.myBind = function(context, ...args) {
   if (typeof this !== 'function') throw new Error('不是函数')
   const that = this
   return function F(...newArgs) {
@@ -184,7 +188,7 @@ Function.prototype.myBind = function (context, ...args) {
 /**
  * new
  */
-const newFunc = function (fn, ...args) {
+const newFunc = function(fn, ...args) {
   if (typeof fn !== 'function') throw new Error('不是函数')
   let obj = {}
   obj.__proto__ = fn.prototype
@@ -236,16 +240,16 @@ class EventBus {
 /**
  * Promise.all
  */
-const all = function (pArr) {
+const all = function(pArr) {
   const result = [], len = pArr.length
   let index = 0
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     for (let p of pArr) {
-      Promise.resolve(p).then(function (res) {
+      Promise.resolve(p).then(function(res) {
         result[index] = res
         index++
         if (result.length === len) return resolve(result)
-      }, function (error) {
+      }, function(error) {
         return reject(error)
       })
     }
@@ -255,12 +259,12 @@ const all = function (pArr) {
 /**
  * Promise.race
  */
-const race = function (pArr) {
-  return new Promise(function (resolve, reject) {
+const race = function(pArr) {
+  return new Promise(function(resolve, reject) {
     for (let p of pArr) {
-      Promise.resolve(p).then(function (res) {
+      Promise.resolve(p).then(function(res) {
         return resolve(res)
-      }, function (error) {
+      }, function(error) {
         return reject(error)
       })
     }

@@ -743,5 +743,41 @@ var corpFlightBookings = function (bookings, n) {
   return res
 };
 
+// 数组转树
+const arrayToTree = arr => {
+  const map = new Map()
+  const tree = []
+  for (let item of arr) {
+    item.children = []
+    map.set(item.id, item)
+    const { parentId } = item
+    if (parentId !== undefined) {
+      const parentNode = map.get(parentId)
+      if (parentNode) {
+        parentNode.children.push(item)
+      } else {
+        // 如果父节点不存在，将当前节点直接添加到树的顶层
+        tree.push(item)
+      }
+    } else {
+      // 如果没有父节点，将当前节点直接添加到树的顶层
+      tree.push(item)
+    }
+  }
+  return tree
+}
+const sourceArray = [
+  { id: 2, name: '部门B', parentId: null },
+  { id: 3, name: '部门C', parentId: 1 },
+  { id: 1, name: '部门A', parentId: 2 },
+  { id: 4, name: '部门D', parentId: 1 },
+  { id: 5, name: '部门E', parentId: 2 },
+  { id: 6, name: '部门F', parentId: 3 },
+  { id: 7, name: '部门G', parentId: 2 },
+  { id: 8, name: '部门H', parentId: 4 }
+]
+console.log('数组转为树')
+console.log(arrayToTree(sourceArray))
+
 
 
