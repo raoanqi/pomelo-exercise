@@ -26,6 +26,8 @@ const bubbleSort = arr => {
  * @returns {*}
  * 时间复杂度：O(n^2)
  * 不是稳定排序
+ * 思想：在循环过程中，不断选择比当前值小的元素，然后将小的元素调换到数组前面来
+ * 循环结束，排序也就完成了
  */
 const selectionSort = arr => {
   const len = arr.length
@@ -48,6 +50,8 @@ const selectionSort = arr => {
 /**
  * 时间复杂度：O(n^2)
  * 是稳定排序
+ * 思路：认为前面的数组已经是排好序的，然后在循环过程中针对每个元素，找到这个元素在已排序数组中的合适位置
+ * 然后执行插入，循环结束排序也就完成了
  */
 /**
  * 插入排序的原理：
@@ -74,7 +78,26 @@ const insertionSort = arr => {
 }
 
 //归并排序
+const merge = (left, right) => {
+  const res = [], leftLen = left.length, rightLen = right.length
+  let leftIndex = 0, rightIndex = 0
+  while (leftIndex < leftLen && rightIndex < rightLen) {
+    if (left[leftIndex] < right[rightIndex]) {
+      res.push(left[leftIndex])
+      leftIndex++
+    } else {
+      res.push(right[rightIndex])
+      rightIndex++
+    }
+  }
+  return res.concat(left.slice(leftIndex)).concat(right.slice(rightIndex))
+}
 const mergeSort = arr => {
+  const len = arr.length
+  if (len <= 1) return arr
+  const middle = Math.floor(len / 2)
+  const left = arr.slice(0, middle), right = arr.slice(middle)
+  return merge(mergeSort(left), mergeSort(right))
 }
 
 //快速排序

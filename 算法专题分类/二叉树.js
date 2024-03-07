@@ -51,7 +51,8 @@ const diameterOfBinaryTree = root => {
   // 定义函数计算节点的最大深度
   const calcDepth = node => {
     if (!node) return 0
-    const leftDepth = calcDepth(node.left), rightDepth = calcDepth(node.right)
+    const leftDepth = calcDepth(node.left),
+        rightDepth = calcDepth(node.right)
     // 计算过程不断更新直径
     diameter = Math.max(diameter, leftDepth + rightDepth)
     // 因为使用递归运算计算深度，所以每次向下递归一层，深度值都要+1
@@ -72,17 +73,17 @@ const mergeTrees = (root1, root2) => {
 }
 
 //相同的树
-var isSameTree = function(p, q) {
+var isSameTree = function (p, q) {
   const compareNode = (nodeA, nodeB) => {
     if (!nodeA && !nodeB) return true
-    if ((!nodeA || !nodeB) || (nodeA.val !== nodeB.val)) return false
+    if (!nodeA || !nodeB || nodeA.val !== nodeB.val) return false
     return compareNode(nodeA.left, nodeB.left) && compareNode(nodeA.right, nodeB.right)
   }
   return compareNode(p, q)
 }
 
 //路径总和
-var hasPathSum = function(root, targetSum) {
+var hasPathSum = function (root, targetSum) {
   // 如果当前的根节点为空，那么直接返回false
   if (!root) return false
   // 如果当前的根节点已经是叶子结点，那么就判断当前根节点的值是不是等于目标和
@@ -92,9 +93,12 @@ var hasPathSum = function(root, targetSum) {
 }
 
 //完全二叉树的节点个数
-var countNodes = function(root) {
+var countNodes = function (root) {
   if (!root) return 0
-  let leftHeight = 0, rightHeight = 0, left = root, right = root
+  let leftHeight = 0,
+      rightHeight = 0,
+      left = root,
+      right = root
   // 计算左子树的高度
   while (left) {
     leftHeight++
@@ -188,7 +192,8 @@ const levelOrder = root => {
   if (!root) return []
   // res：最终的遍历结果
   // queue：用于存储在下一轮遍历时需要遍历的节点，在开始遍历之前，初始化为[root]
-  const res = [], queue = [root]
+  const res = [],
+      queue = [root]
   /**
    * 核心思想：while用于遍历level，for循环用于遍历每个level从左到右的全部节点
    */
@@ -213,7 +218,8 @@ const buildTree = (preorder, inorder) => {
   // 只要其中任意一个遍历为空，说明没有元素，无法构建，直接返回null
   if (!preorder.length || !inorder.length) return null
   // 前序遍历的第一个元素就是根节点，借此创建树的根节点
-  const rootValue = preorder[0], root = new TreeNode(rootValue)
+  const rootValue = preorder[0],
+      root = new TreeNode(rootValue)
   // 在中序遍历中找到根节点的位置，根节点左边的元素都是左子树的元素，根节点右边的元素都是右子树的元素
   const rootIndex = inorder.indexOf(rootValue)
   // 构建左子树：前序遍历中，根节点之后的rootIndex个元素就是左子树的元素，中序遍历中，根节点左边的全部元素就是左子树的元素
@@ -237,8 +243,8 @@ const flatten = root => {
   root.right = root.left
   root.left = null
   /*
-  * 二叉树有个特点，就是左子树是排序的并且小于等于中间节点，中间节点小于等于右子树，右子树也是排序的
-  * */
+   * 二叉树有个特点，就是左子树是排序的并且小于等于中间节点，中间节点小于等于右子树，右子树也是排序的
+   * */
   let currentNode = root
   while (currentNode.right) {
     currentNode = currentNode.right
@@ -258,7 +264,7 @@ const flatten = root => {
  * 因此采用while循环的方式来实现遍历，每遍历一个节点，k就会减去1，这样当k为0的时候，就是第k大的元素了
  * 时间复杂度：O(n)，因为最坏的情况下，需要访问全部n个节点才能得到答案
  */
-var kthSmallest = function(root, k) {
+var kthSmallest = function (root, k) {
   const stack = []
   while (root || stack.length) {
     while (root) {
@@ -284,7 +290,7 @@ const treeToArray = tree => {
       parentId: node.parentId
     })
     if (node?.children?.length) {
-      stack.push(...node.children.map(child => ({ ...child, parentId: node.id })))
+      stack.push(...node.children.map(child => ({...child, parentId: node.id})))
     }
   }
   return arr
@@ -313,5 +319,3 @@ const sourceTree = [
 ]
 console.log('树转数组')
 console.log(treeToArray(sourceTree))
-
-
