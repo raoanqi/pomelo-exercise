@@ -32,6 +32,11 @@ const maxDepth = root => {
 }
 
 //翻转二叉树
+/**
+ * @param root
+ * @returns {*|null}
+ * 采用分解问题的思路
+ */
 const invertTree = root => {
   // 根节点为空就直接返回null
   if (!root) return null
@@ -46,6 +51,17 @@ const invertTree = root => {
 }
 
 //二叉树的直径
+/**
+ * @param root
+ * @returns {number}
+ * 采用遍历的方式来解决
+ */
+/**
+ * @param root
+ * @returns {number}
+ * 二叉树的直径就是树立最长的那条路径的长度，这条路径未必会经过根节点
+ * 经过某个节点的直径，实际就等于这个节点的左右子树的最大深度之和
+ */
 const diameterOfBinaryTree = root => {
   let diameter = 0
   // 定义函数计算节点的最大深度
@@ -63,6 +79,12 @@ const diameterOfBinaryTree = root => {
 }
 
 //合并二叉树
+/**
+ * @param root1
+ * @param root2
+ * @returns {TreeNode|*}
+ * 使用分解问题的思路解决
+ */
 const mergeTrees = (root1, root2) => {
   if (!root1) return root2
   if (!root2) return root1

@@ -264,35 +264,35 @@ const threeSum = nums => {
     }
   }
   return res
+}
 
-  //搜索旋转排序数组
-  const search = (nums, target) => {
-    const len = nums.length
-    let left = 0, right = len - 1
-    // 考虑等于是针对nums中只有一个元素的情况
-    while (left <= right) {
-      const mid = Math.floor((left + right) / 2)
-      if (nums[mid] === target) return mid
-      // 如果数组没有进行旋转，直接就是二分法
-      // 由于要求logn的时间，考虑到旋转后的两个子数组其实是排序数组，所以针对两个子数组分别进行二分法
-      if (nums[left] <= nums[mid]) {
-        // nums[left]<nums[mid]，说明左半段是递增的
-        if (nums[left] <= target && target < nums[mid]) {
-          right = mid - 1
-        } else {
-          left = mid + 1
-        }
+//搜索旋转排序数组
+const search = (nums, target) => {
+  const len = nums.length
+  let left = 0, right = len - 1
+  // 考虑等于是针对nums中只有一个元素的情况
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2)
+    if (nums[mid] === target) return mid
+    // 如果数组没有进行旋转，直接就是二分法
+    // 由于要求logn的时间，考虑到旋转后的两个子数组其实是排序数组，所以针对两个子数组分别进行二分法
+    if (nums[left] <= nums[mid]) {
+      // nums[left]<nums[mid]，说明左半段是递增的
+      if (nums[left] <= target && target < nums[mid]) {
+        right = mid - 1
       } else {
-        // 否则，就说明mid右边这一段是递增的
-        if (nums[mid] < target && target <= nums[right]) {
-          left = mid + 1
-        } else {
-          right = mid - 1
-        }
+        left = mid + 1
+      }
+    } else {
+      // 否则，就说明mid右边这一段是递增的
+      if (nums[mid] < target && target <= nums[right]) {
+        left = mid + 1
+      } else {
+        right = mid - 1
       }
     }
-    return -1
   }
+  return -1
 }
 
 //在排序数组中查找元素的第一个和最后一个位置
@@ -750,7 +750,7 @@ const arrayToTree = arr => {
   for (let item of arr) {
     item.children = []
     map.set(item.id, item)
-    const { parentId } = item
+    const {parentId} = item
     if (parentId !== undefined) {
       const parentNode = map.get(parentId)
       if (parentNode) {
@@ -767,14 +767,14 @@ const arrayToTree = arr => {
   return tree
 }
 const sourceArray = [
-  { id: 2, name: '部门B', parentId: null },
-  { id: 3, name: '部门C', parentId: 1 },
-  { id: 1, name: '部门A', parentId: 2 },
-  { id: 4, name: '部门D', parentId: 1 },
-  { id: 5, name: '部门E', parentId: 2 },
-  { id: 6, name: '部门F', parentId: 3 },
-  { id: 7, name: '部门G', parentId: 2 },
-  { id: 8, name: '部门H', parentId: 4 }
+  {id: 2, name: '部门B', parentId: null},
+  {id: 3, name: '部门C', parentId: 1},
+  {id: 1, name: '部门A', parentId: 2},
+  {id: 4, name: '部门D', parentId: 1},
+  {id: 5, name: '部门E', parentId: 2},
+  {id: 6, name: '部门F', parentId: 3},
+  {id: 7, name: '部门G', parentId: 2},
+  {id: 8, name: '部门H', parentId: 4}
 ]
 console.log('数组转为树')
 console.log(arrayToTree(sourceArray))

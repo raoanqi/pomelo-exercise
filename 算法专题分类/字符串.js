@@ -16,6 +16,35 @@ const validBrackets = str => {
   return stack.length === 0
 }
 
+// 无重复字符的最长子串
+/**
+ * @param str
+ * @returns {number|*}
+ * 使用滑动窗口解决
+ */
+var lengthOfLongestSubstring = function (str) {
+  const len = str.length
+  if (len <= 1) return len
+  // 初始化窗口，其中temp用于记录前面的子串
+  let left = 0, right = 1, max = 0, temp
+  // right的最大值是len-1，所以不用考虑等于的情况
+  while (right < len) {
+    // 将left到right（不包含right）的子串取出来
+    temp = str.slice(left, right)
+    // 如果temp中已经有str[right]元素，那么left向右移动，并跳出本轮循环
+    if (temp.indexOf(str[right]) > -1) {
+      // temp中包含s[right]，那么left就向右移动
+      // 并且跳过本轮循环，right会在下一轮循环中向右移动
+      left++
+      continue
+    } else {
+      right++
+    }
+    max = Math.max(max, right - left)
+  }
+  return max
+};
+
 // 28 找出字符串中第一个匹配的下标
 const strStr = (haystack, needle) => {
   const len = haystack.length, needleLen = needle.length;
@@ -314,4 +343,36 @@ const numDecodings = s => {
   }
   // 整个循环借结束之后，dp[len]就是最后的结果
   return dp[len]
+};
+
+/**
+ * 最长回文字符串
+ * 使用双指针解法
+ */
+var longestPalindrome = function (s) {
+  const len = s.length
+  if (len <= 1) return s
+  let max = ''
+  /**
+   * @param left
+   * @param right
+   * helper就是计算以其中一个元素为起点开始向两边扩展计算回文串的方法
+   */
+  const helper = (left, right) => {
+    while (left >= 0 && right < len && s[left] === s[right]) {
+      left--
+      right++
+    }
+    // 注意这里，slice的第一个参数是left+1，因为在上面while最后一轮循环中left--，所以实际上满足循环条件的最后一个left值需要加1
+    // 而right虽然在最后一轮while中执行了while+1，但是并不需要-1，因为slice的第二个参数并不会被取到，取到的最后一个元素就是right-1，正好满足
+    const maxStr = s.slice(left + 1, right)
+    if (maxStr.length > max.length) max = maxStr
+  }
+  // 回文串有可能是奇数，也有可能是偶数，如果是奇数，直接从i开始向左右扩展即可
+  // 如果是偶数，就要从i,i+1向左右两边扩展
+  for (let i = 0; i < len; i++) {
+    helper(i, i)
+    helper(i, i + 1)
+  }
+  return max
 };

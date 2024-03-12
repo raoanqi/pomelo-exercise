@@ -12,7 +12,7 @@ const singleNumber = nums => {
 const countBits = n => {
   const count = num => {
     let count = 0
-    while (count !== 0) {
+    while (num !== 0) {
       num = num & num - 1
       count++
     }
