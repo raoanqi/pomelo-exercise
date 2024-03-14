@@ -8,24 +8,24 @@
 const rotate = matrix => {
   const len = matrix.length
   // 旋转主对角线
-  for (let i = 0; i < len; i++) {
+  for (let i = 0; i < len - 1; i++) {
     for (let j = i + 1; j < len; j++) {
-      [matrix[i][j], matrix[j][i]] = [matrix[j][i], matrix[i][j]]
+      ;[matrix[i][j], matrix[j][i]] = [matrix[j][i], matrix[i][j]]
     }
   }
   // 水平翻转
   for (let i = 0; i < len; i++) {
     for (let j = 0; j < len / 2; j++) {
-      [matrix[i][j], matrix[i][len - 1 - j]] = [matrix[i][len - 1 - j], matrix[i][j]]
+      ;[matrix[i][j], matrix[i][len - 1 - j]] = [matrix[i][len - 1 - j], matrix[i][j]]
     }
   }
 }
 
 // 36 有效数独
 const isValidSudoku = board => {
-  const rows = Array.from({length: 9}, () => new Set())
-  const columns = Array.from({length: 9}, () => new Set())
-  const boxes = Array.from({length: 9}, () => new Set())
+  const rows = Array.from({ length: 9 }, () => new Set())
+  const columns = Array.from({ length: 9 }, () => new Set())
+  const boxes = Array.from({ length: 9 }, () => new Set())
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
       const currentNumber = board[i][j]
@@ -57,7 +57,7 @@ const isValidSudoku = board => {
     }
   }
   return true
-};
+}
 
 // 54 螺旋数组
 /**
@@ -92,7 +92,7 @@ const spiralOrder = matrix => {
     }
   }
   return res
-};
+}
 
 // 73 矩阵置零
 /**
@@ -101,7 +101,8 @@ const spiralOrder = matrix => {
  * 空间复杂度：O(m+n)
  */
 const setZeroes = matrix => {
-  const m = matrix.length, n = matrix[0].length
+  const m = matrix.length,
+    n = matrix[0].length
   // 分别创建两个数组，长度为m，n，初始化时全部填充0
   const rows = new Array(m).fill(0)
   const cols = new Array(n).fill(0)
@@ -125,6 +126,4 @@ const setZeroes = matrix => {
       }
     }
   }
-};
-
-
+}
