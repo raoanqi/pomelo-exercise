@@ -4,7 +4,7 @@ Function.prototype.myApply = function (context, args) {
   if (!Array.isArray(args)) throw new Error('不是数组')
   context = Object(context || window)
   const fn = Symbol()
-  context[fn] = this
+  context.fn = this
   const res = context.fn(...args)
   delete context.fn
   return res
@@ -15,9 +15,9 @@ Function.prototype.myCall = function (context, ...args) {
   if (typeof this !== 'function') throw new Error('不是函数')
   context = Object(context || window)
   const fn = Symbol()
-  context[fn] = this
-  const res = context[fn](...args)
-  delete context[fn]
+  context.fn = this
+  const res = context.fn(...args)
+  delete context.fn
   return res
 }
 
@@ -53,20 +53,30 @@ const myNew = function (fn, ...args) {
 // debounce
 const debounce = function (fn, delay) {
   let timer
-  return function () {
-    clearTimeout(timer)
-    timer = setTimeout(() => fn.apply(this, arguments), delay)
+  // 如果该标志为true，代表是第一次执行，那么就不要延迟，立即执行
+  let immediate = true
+  return function (...args) {
+    const context = this
+    if (immediate) {
+      fn.apply(context, args)
+      immediate = false
+    } else {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        fn.apply(context, args)
+      }, delay)
+    }
   }
 }
 
 // throttle
 const throttle = function (fn, delay) {
   let startTime = 0
-  return function () {
+  return function (...args) {
     const nowTime = +new Date()
     if (nowTime - startTime > delay) {
       startTime = nowTime
-      fn.apply(this, arguments)
+      fn.apply(this, args)
     }
   }
 }
@@ -123,6 +133,7 @@ const deepClone = function (target) {
   } else if (target instanceof RegExp) {
     res = new RegExp(target)
   } else if (target instanceof Date) {
+    // getTime()：获取对应时间的时间戳
     res = new Date(target.getTime())
   } else {
     res = {}
@@ -163,7 +174,7 @@ class EventBus {
   }
 
   off(type, fn) {
-    this.content[type] = this.content[type].filter(item => item !== fn)
+    this.content[type] = (this.content[type] ?? []).filter(item => item !== fn)
   }
 
   clear(type) {
