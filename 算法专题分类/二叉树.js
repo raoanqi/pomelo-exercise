@@ -1,4 +1,34 @@
-//二叉树中序遍历
+// 二叉树前序遍历：递归解法
+const preOrderTraverse = root => {
+  const res = []
+  const traverse = node => {
+    if (!node) return
+    res.push(node.val)
+    traverse(node.left)
+    traverse(node.right)
+  }
+  traverse(root)
+  return res
+}
+
+// 二叉树前序遍历：递归解法
+var preorderTraversal = function (root) {
+  const res = [],
+    stack = []
+  while (stack.length || root) {
+    if (root) {
+      res.push(root.val)
+      stack.push(root)
+      root = root.left
+    } else {
+      root = stack.pop()
+      root = root.right
+    }
+  }
+  return res
+}
+
+//二叉树中序遍历:递归解法
 const inOrderTraverse = root => {
   const res = []
   const traverse = node => {
@@ -8,6 +38,53 @@ const inOrderTraverse = root => {
     traverse(node.right)
   }
   traverse(root)
+  return res
+}
+
+// 二叉树中序遍历:迭代解法
+const inOrderTraverse = root => {
+  const res = [],
+    stack = []
+  while (stack.length || root) {
+    if (root) {
+      stack.push(root)
+      root = root.left
+    } else {
+      const node = stack.pop()
+      res.push(node.val)
+      root = node.right
+    }
+  }
+  return res
+}
+
+// 二叉树后序遍历：递归解法
+var postorderTraversal = function (root) {
+  const res = []
+  const traverse = node => {
+    if (!node) return
+    traverse(node.left)
+    traverse(node.right)
+    res.push(node.val)
+  }
+  traverse(root)
+  return res
+}
+
+// 二叉树后序遍历：迭代解法
+var postorderTraversal = function (root) {
+  const res = [],
+    stack = []
+  while (stack.length || root) {
+    if (root) {
+      stack.push(root)
+      res.unshift(root.val)
+      root = root.right
+    } else {
+      root = stack.pop()
+      root = root.left
+    }
+  }
   return res
 }
 
@@ -68,7 +145,7 @@ const diameterOfBinaryTree = root => {
   const calcDepth = node => {
     if (!node) return 0
     const leftDepth = calcDepth(node.left),
-        rightDepth = calcDepth(node.right)
+      rightDepth = calcDepth(node.right)
     // 计算过程不断更新直径
     diameter = Math.max(diameter, leftDepth + rightDepth)
     // 因为使用递归运算计算深度，所以每次向下递归一层，深度值都要+1
@@ -118,9 +195,9 @@ var hasPathSum = function (root, targetSum) {
 var countNodes = function (root) {
   if (!root) return 0
   let leftHeight = 0,
-      rightHeight = 0,
-      left = root,
-      right = root
+    rightHeight = 0,
+    left = root,
+    right = root
   // 计算左子树的高度
   while (left) {
     leftHeight++
@@ -215,7 +292,7 @@ const levelOrder = root => {
   // res：最终的遍历结果
   // queue：用于存储在下一轮遍历时需要遍历的节点，在开始遍历之前，初始化为[root]
   const res = [],
-      queue = [root]
+    queue = [root]
   /**
    * 核心思想：while用于遍历level，for循环用于遍历每个level从左到右的全部节点
    */
@@ -241,7 +318,7 @@ const buildTree = (preorder, inorder) => {
   if (!preorder.length || !inorder.length) return null
   // 前序遍历的第一个元素就是根节点，借此创建树的根节点
   const rootValue = preorder[0],
-      root = new TreeNode(rootValue)
+    root = new TreeNode(rootValue)
   // 在中序遍历中找到根节点的位置，根节点左边的元素都是左子树的元素，根节点右边的元素都是右子树的元素
   const rootIndex = inorder.indexOf(rootValue)
   // 构建左子树：前序遍历中，根节点之后的rootIndex个元素就是左子树的元素，中序遍历中，根节点左边的全部元素就是左子树的元素
@@ -312,7 +389,7 @@ const treeToArray = tree => {
       parentId: node.parentId
     })
     if (node?.children?.length) {
-      stack.push(...node.children.map(child => ({...child, parentId: node.id})))
+      stack.push(...node.children.map(child => ({ ...child, parentId: node.id })))
     }
   }
   return arr
