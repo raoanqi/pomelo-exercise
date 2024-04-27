@@ -4,9 +4,9 @@ Function.prototype.myApply = function (context, args) {
   if (!Array.isArray(args)) throw new Error('不是数组')
   context = Object(context || window)
   const fn = Symbol()
-  context.fn = this
-  const res = context.fn(...args)
-  delete context.fn
+  context[fn] = this
+  const res = context[fn](...args)
+  delete context[fn]
   return res
 }
 
@@ -15,9 +15,9 @@ Function.prototype.myCall = function (context, ...args) {
   if (typeof this !== 'function') throw new Error('不是函数')
   context = Object(context || window)
   const fn = Symbol()
-  context.fn = this
-  const res = context.fn(...args)
-  delete context.fn
+  context[fn] = this
+  const res = context[fn](...args)
+  delete context[fn]
   return res
 }
 
