@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>事件委托</title>
+</head>
+<body>
+<ul id='ul'>
+  <li>1</li>
+  <li>2</li>
+  <li>3</li>
+  <li>4</li>
+  <li>5</li>
+  <li>6</li>
+  <li>7</li>
+  <li>8</li>
+  <li>9</li>
+  <li>10</li>
+</ul>
+</body>
+<script>
+  const ulEle = document.getElementById('ul')
+  ulEle.onclick = function(event) {
+    // 这两行兼容IE
+    // 在较旧版本的 Internet Explorer（IE 8 及以下版本）中，事件对象并不是作为参数传递的，而是存储在全局对象 window 的 event 属性中
+    // 在旧版 IE 浏览器中，event.target 并不存在，而是使用 ev.srcElement 来表示触发事件的元素
+    event = event || window.event
+    const target = event.target || event.srcElement
+    target.nodeName.toLowerCase() === 'li' && alert(target.innerHTML)
+  }
+</script>
+</html>
