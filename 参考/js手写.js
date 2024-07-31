@@ -151,7 +151,7 @@ const sleep1 = duration => {
 }
 const sleep2 = duration => new Promise(resolve => setTimeout(resolve, duration))
 
-// 发布订阅
+// 发布订阅模式
 class EventBus {
   constructor() {
     this.content = {}
@@ -185,6 +185,66 @@ class EventBus {
     this.content[type].forEach(fn => fn(...args))
   }
 }
+
+// 观察者模式：观察者观察主题
+// 主题
+class Subject {
+  // 存储观察者和数据
+  constructor() {
+    this.observers = []
+    this.state = null
+  }
+
+  // 添加观察者
+  addObserver(observer) {
+    this.observers.push(observer)
+  }
+
+  // 删除观察者
+  removeObserver(observer) {
+    this.observers.filter(o => o !== observer)
+  }
+
+  // 通知观察者
+  notifyObserver() {
+    this.observers.forEach(o => o.update(this.state))
+  }
+
+  // 更新数据
+  setState(state) {
+    this.state = state
+    this.notifyObserver()
+  }
+}
+
+// 观察者
+class Observer {
+  constructor(name) {
+    this.name = name
+  }
+
+  update(state) {
+    console.log('state is updated')
+  }
+}
+
+// 示例使用
+const subject = new Subject()
+
+const observer1 = new Observer('Observer 1')
+const observer2 = new Observer('Observer 2')
+
+subject.addObserver(observer1)
+subject.addObserver(observer2)
+
+subject.setState('State 1')
+// Observer 1 notified of state change to: State 1
+// Observer 2 notified of state change to: State 1
+
+subject.removeObserver(observer1)
+
+subject.setState('State 2')
+// Observer 2 notified of state change to: State 2
 
 // 数组去重
 const arrUnique1 = arr => Array.from(new Set(arr))
@@ -451,3 +511,13 @@ function parse(str) {
       .map(value => parse(value))
   }
 }
+
+// 原型链继承
+
+// 构造函数继承
+
+// 组合继承
+
+// 寄生组合继承
+
+// ES6继承
