@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>虚拟dom转换为真实dom</title>
+</head>
+<body>
+<div id="app"></div>
+<script>
+  const testDOM = {
+    tag: 'div',
+    props: {
+      id: 'one'
+    },
+    type: 1,
+    children: [
+      {
+        tag: 'div',
+        props: {
+          id: 'two'
+        },
+        type: 1,
+        children: [
+          {
+            type: 3,
+            value: '这是一段文本'
+          }
+        ]
+      }
+    ]
+  }
+
+  const createDOM = virtualDOM => {
+    const { tag, props, value, type, children } = virtualDOM
+    let node = null
+    // type为1，是标签节点
+    if (type === 1) {
+      // 创建接节点
+      node = document.createElement(tag)
+      // 设置节点的属性
+      const propKeys = Object.keys(props)
+      if (propKeys && propsKeys.length) {
+        for (let key of propKeys) {
+          node.setAttribute(key, props[key])
+        }
+      }
+      // 设置子节点
+      const childrenNumber = children.length
+      for (let i = 0; i < childrenNumber; i++) {
+        node.appendChild(createDOM(children[i]))
+      }
+    } else if (type === 3) {
+      // 如果是文本节点
+      node = document.createTextNode(value)
+    }
+    return node
+  }
+  const wrap = document.getElementById('app')
+  const realDOM = createDOM(testDOM)
+  wrap.appendChild(realDOM)
+</script>
+</body>
+</html>
