@@ -1,6 +1,7 @@
 //两数之和
 const twoNumberSum = (nums, target) => {
-  const map = new Map(), len = nums.length
+  const map = new Map(),
+    len = nums.length
   for (let i = 0; i < len; i++) {
     let temp = target - nums[i]
     if (map.has(temp)) {
@@ -13,7 +14,8 @@ const twoNumberSum = (nums, target) => {
 //买卖股票的最佳时机
 const sellStock = prices => {
   const len = prices.length
-  let benefit = 0, lowest = prices[0]
+  let benefit = 0,
+    lowest = prices[0]
   for (let i = 1; i < len; i++) {
     benefit = Math.max(benefit, prices[i] - lowest)
     lowest = Math.min(lowest, prices[i])
@@ -24,14 +26,15 @@ const sellStock = prices => {
 //多数元素
 //使用投票算法：需要确保元素出现的次数在总数的二分之一以上
 const majorityElement = nums => {
-  let count = 0, candidate
+  let count = 0,
+    candidate
   for (let ele of nums) {
     /**
      * count为0，有两种情况：
      * 1.for循环刚开始
      * 2.循环中count先增大，然后被降为0，说明之前设置的候选元素肯定没有超过n/2，所以不是多数元素，所以此时要重新设置候选元素
      **/
-    (count === 0) && (candidate = ele)
+    count === 0 && (candidate = ele)
     // 出现了不同元素相当于就会对消之前的结果
     count += candidate === ele ? 1 : -1
   }
@@ -60,7 +63,9 @@ const moveZeroes = nums => {
  * 将数组转换为集合操作，集合的查找时间复杂度是O(1)
  */
 const findDisappearedNumbers = nums => {
-  const res = [], len = nums.length, set = new Set(nums)
+  const res = [],
+    len = nums.length,
+    set = new Set(nums)
   for (let i = 1; i <= len; i++) {
     if (!set.has(i)) {
       res.push(i)
@@ -81,7 +86,7 @@ var removeElement = function (nums, val) {
     }
   }
   return len - count
-};
+}
 
 //删除有序数组中的重复项
 var removeDuplicates = function (nums) {
@@ -95,7 +100,7 @@ var removeDuplicates = function (nums) {
     }
   }
   return len - count
-};
+}
 
 //回文数
 var isPalindrome = function (x) {
@@ -104,11 +109,11 @@ var isPalindrome = function (x) {
   let reverse = 0
   // 注意这个翻转数字的方式
   while (x > 0) {
-    reverse = reverse * 10 + x % 10
+    reverse = reverse * 10 + (x % 10)
     x = Math.floor(x / 10)
   }
   return original === reverse
-};
+}
 
 //加一
 var plusOne = function (digits) {
@@ -120,14 +125,15 @@ var plusOne = function (digits) {
     // 如果加上1之后需要进位，那么这一位就会变为0
     digits[i] = 0
   }
-// 遍历完数组之后，如果还没有return，说明每一位都发生了进位
-// 此时数组中的每一个位置都是0，那么直接在前面补一位就可以了
+  // 遍历完数组之后，如果还没有return，说明每一位都发生了进位
+  // 此时数组中的每一个位置都是0，那么直接在前面补一位就可以了
   return [1, ...digits]
-};
+}
 
 //汇总区间
 var summaryRanges = function (nums) {
-  const len = nums.length, res = []
+  const len = nums.length,
+    res = []
   let i = 0
   while (i < len) {
     // j从i开始循环
@@ -145,7 +151,7 @@ var summaryRanges = function (nums) {
     i = j + 1
   }
   return res
-};
+}
 
 // 存在重复元素2
 var containsNearbyDuplicate = function (nums, k) {
@@ -159,7 +165,7 @@ var containsNearbyDuplicate = function (nums, k) {
     map[currentNumber] = i
   }
   return false
-};
+}
 
 // 217 存在重复元素
 const containsDuplicate = nums => {
@@ -172,7 +178,7 @@ const containsDuplicate = nums => {
     }
   }
   return false
-};
+}
 
 // 268 丢失的数字
 /**
@@ -181,16 +187,17 @@ const containsDuplicate = nums => {
  * 将数组转换为集合操作，集合查找数据的时间复杂度是O(1)
  */
 const missingNumber = nums => {
-  const len = nums.length, set = new Set(nums)
+  const len = nums.length,
+    set = new Set(nums)
   for (let i = 0; i <= len; i++) {
     if (!set.has(i)) return i
   }
-};
-
+}
 
 // 350 两个数组的交集
 const intersect = (nums1, nums2) => {
-  const res = [], map = new Map()
+  const res = [],
+    map = new Map()
   for (let item of nums1) {
     map.set(item, (map.get(item) || 0) + 1)
   }
@@ -201,12 +208,14 @@ const intersect = (nums1, nums2) => {
     }
   }
   return res
-};
+}
 
 //盛水最多的容器
 const maxArea = height => {
   // maxArea：能盛水的面积
-  let left = 0, right = height.length - 1, maxArea = 0
+  let left = 0,
+    right = height.length - 1,
+    maxArea = 0
   // 使用双指针法从两端向中间逐步靠拢
   // 这里不用考虑left等于right，只有当height只有一个元素时需要考虑等于，但题目说明至少2条线
   while (left < right) {
@@ -224,12 +233,14 @@ const maxArea = height => {
 //三数之和
 const threeSum = nums => {
   nums.sort((a, b) => a - b)
-  const res = [], len = nums.length
+  const res = [],
+    len = nums.length
   // 注意循环边界，这里i的终止边界是len-2，因为
   // 这个算法的思想就是遍历i，在遍历过程中固定住i，然后将问题转换为
   // 两数之和，所以必须确保再i终止时，右侧还有两个元素可以进行求解两数之和，所以i的终止条件就是len-2
   for (let i = 0; i < len - 2; i++) {
-    let left = i + 1, right = len - 1
+    let left = i + 1,
+      right = len - 1
     // 如果遇到相同的数字，直接跳过
     if (i > 0 && nums[i - 1] === nums[i]) continue
     while (left < right) {
@@ -269,7 +280,8 @@ const threeSum = nums => {
 //搜索旋转排序数组
 const search = (nums, target) => {
   const len = nums.length
-  let left = 0, right = len - 1
+  let left = 0,
+    right = len - 1
   // 考虑等于是针对nums中只有一个元素的情况
   while (left <= right) {
     const mid = Math.floor((left + right) / 2)
@@ -300,7 +312,9 @@ const searchRange = (nums, target) => {
   // lower：控制是否查询的是第一个出现的位置，为false则代表查找元素出现的最后一个位置
   const binarySearch = (nums, target, lower) => {
     const len = nums.length
-    let left = 0, right = len - 1, ans = nums.length
+    let left = 0,
+      right = len - 1,
+      ans = nums.length
     while (left <= right) {
       const mid = Math.floor((left + right) / 2)
       if (nums[mid] > target || (lower && nums[mid] >= target)) {
@@ -325,7 +339,8 @@ const maxSubArray = nums => {
   // maxSumRes：最终需要计算的子数组和
   // maxSumCurrent：计算过程中的子数组和
   // 刚开始的时候都认为是数组的第一个元素
-  let maxSumRes = nums[0], maxSumCurrent = nums[0]
+  let maxSumRes = nums[0],
+    maxSumCurrent = nums[0]
   const len = nums.length
   for (let i = 1; i < len; i++) {
     // 对于每个元素，判断当前正在遍历的元素与该元素加上前置数组的和的大小关系
@@ -386,19 +401,21 @@ const sortColors = nums => {
   // left：指向数组排序之后的最后一个0
   // right：指向数组排序之后的第一个2
   // current：遍历过程中的指针，从0开始遍历
-  let left = 0, right = len - 1, current = 0
+  let left = 0,
+    right = len - 1,
+    current = 0
   // 等于的情况也要考虑，最后一个元素nums[right]也是需要判断的
   while (current <= right) {
     if (nums[current] === 0) {
       // 如果当前元素是0，那么就将其与left指向的元素交换位置
-      [nums[left], nums[current]] = [nums[current], nums[left]]
+      ;[nums[left], nums[current]] = [nums[current], nums[left]]
       // 交换之后，left指向的元素已经是0了，所以left向右移动一位
       // 交换之后，current的位置已经是0了，所以current向右移动一位
       left++
       current++
     } else if (nums[current] === 2) {
       // 如果当前元素是2，那么就将其与right指向的元素交换位置
-      [nums[current], nums[right]] = [nums[right], nums[current]]
+      ;[nums[current], nums[right]] = [nums[right], nums[current]]
       // 交换之后，right指向的元素已经是2了，所以right向左移动一位
       // 这里current并不需要移动，因为交换之后，current指向的元素还没有被遍历过，所以需要再次判断
       right--
@@ -421,7 +438,8 @@ const longestConsecutive = nums => {
     if (!set.has(item - 1)) {
       // currentNum:记录连续序列的起始数字
       // currentLength：记录连续序列的长度，初始值为1
-      let currentNum = item, currentLength = 1
+      let currentNum = item,
+        currentLength = 1
       // 以currentNum为起始继续向后递增，判断set中是否包含后续的连续元素
       while (set.has(currentNum + 1)) {
         currentNum += 1
@@ -442,10 +460,13 @@ const maxProduct = nums => {
   // maxSoFar
   // minSoFar
   // res
-  let maxSoFar = nums[0], minSoFar = nums[0], res = nums[0]
+  let maxSoFar = nums[0],
+    minSoFar = nums[0],
+    res = nums[0]
   for (let i = 1; i < len; i++) {
     // 这里需要记录maxSoFar，因为在下面的迭代过程中，maxSoFar会被重写
-    const current = nums[i], tempMax = maxSoFar
+    const current = nums[i],
+      tempMax = maxSoFar
     // 需要记录最大乘积以及最小乘积，因为最小乘积若为负数，那么乘以另外一个负数有可能成为最大值
     maxSoFar = Math.max(current, current * maxSoFar, current * minSoFar)
     minSoFar = Math.min(current, current * tempMax, current * minSoFar)
@@ -485,14 +506,14 @@ var removeDuplicates = function (nums) {
     }
   }
   return len - count
-};
+}
 
 //轮转数组
 var rotate = function (nums, k) {
   const len = nums.length
   k = k % len
   nums.unshift(...nums.splice(-k))
-};
+}
 
 //买卖股票的最佳时机2
 // 采用贪心算法的策略，只要当天的价格比前一天的价格高，那么就在昨天买入，今天卖出，这样就能获得最大的利润
@@ -503,12 +524,13 @@ var maxProfit = function (prices) {
     if (prices[i] > prices[i - 1]) max += prices[i] - prices[i - 1]
   }
   return max
-};
+}
 
 // 两数之和2--输入有序数组
 var twoSum = function (numbers, target) {
   const len = numbers.length
-  let left = 0, right = len - 1
+  let left = 0,
+    right = len - 1
   while (left < right) {
     if (numbers[left] + numbers[right] > target) {
       right--
@@ -518,7 +540,7 @@ var twoSum = function (numbers, target) {
       return [left + 1, right + 1]
     }
   }
-};
+}
 
 // 跳跃游戏2
 var jump = function (nums) {
@@ -533,7 +555,9 @@ var jump = function (nums) {
    * maxReach:当前位置所能跳到的最远位置
    * end:索引为i-1的元素所能到达的最远位置，就是上一个元素所能到达的最远位置
    */
-  let step = 0, maxReach = 0, end = 0
+  let step = 0,
+    maxReach = 0,
+    end = 0
   for (let i = 0; i < len - 1; i++) {
     // 更新当前元素能达到的最远的位置
     maxReach = Math.max(maxReach, i + nums[i])
@@ -546,7 +570,7 @@ var jump = function (nums) {
       if (maxReach >= len - 1) return step
     }
   }
-};
+}
 
 //H指数
 var hIndex = function (citations) {
@@ -568,7 +592,7 @@ var hIndex = function (citations) {
     }
   }
   return h
-};
+}
 
 //长度最小的子数组：滑动窗口算法，时间复杂度是O(n)
 var minSubArrayLen = function (target, nums) {
@@ -577,7 +601,9 @@ var minSubArrayLen = function (target, nums) {
    * @type {number}
    * 先将最小长度设置为一个极限
    */
-  let minLength = Infinity, left = 0, sum = 0
+  let minLength = Infinity,
+    left = 0,
+    sum = 0
   /**
    * 使用滑动窗口开始逼近
    */
@@ -594,7 +620,7 @@ var minSubArrayLen = function (target, nums) {
     }
   }
   return minLength === Infinity ? 0 : minLength
-};
+}
 
 // 162 寻找峰值
 /**
@@ -604,7 +630,8 @@ var minSubArrayLen = function (target, nums) {
  */
 const findPeakElement = nums => {
   // 初始化二分查找的左右指针
-  let left = 0, right = nums.length - 1
+  let left = 0,
+    right = nums.length - 1
   // 左右指针在循环过程中不断向中间移动，相遇时返回left或者right就是找到的峰值
   while (left < right) {
     const mid = Math.floor((left + right) / 2)
@@ -630,12 +657,16 @@ const findPeakElement = nums => {
     }
   }
   return left
-};
+}
 
 // 42 接雨水
 // todo：需要进一步解析
 const trap = height => {
-  let left = 0, right = height.length - 1, leftMax = 0, rightMax = 0, res = 0
+  let left = 0,
+    right = height.length - 1,
+    leftMax = 0,
+    rightMax = 0,
+    res = 0
   while (left < right) {
     leftMax = Math.max(leftMax, height[left])
     rightMax = Math.max(rightMax, height[right])
@@ -648,7 +679,7 @@ const trap = height => {
     }
   }
   return res
-};
+}
 
 /**
  * 前缀和数组类型题目
@@ -667,11 +698,11 @@ var NumArray = function (nums) {
   for (let i = 1; i <= len; i++) {
     this.preSum[i] = this.preSum[i - 1] + nums[i - 1]
   }
-};
+}
 
 NumArray.prototype.sumRange = function (left, right) {
   return this.preSum[right + 1] - this.preSum[left]
-};
+}
 
 // 304 二维区域和检索，这是一道二维数组前缀和
 /**
@@ -680,18 +711,19 @@ NumArray.prototype.sumRange = function (left, right) {
  * 时间复杂度O(mn)，mn分别为矩阵的行数和列数
  */
 var NumMatrix = function (matrix) {
-  const m = matrix.length, n = matrix[0].length
+  const m = matrix.length,
+    n = matrix[0].length
   this.preSum = new Array(m + 1).fill(0).map(() => new Array(n + 1).fill(0))
   for (let i = 1; i <= m; i++) {
     for (let j = 1; j <= n; j++) {
       this.preSum[i][j] = this.preSum[i - 1][j] + this.preSum[i][j - 1] + matrix[i - 1][j - 1] - this.preSum[i - 1][j - 1]
     }
   }
-};
+}
 
 NumMatrix.prototype.sumRegion = function (row1, col1, row2, col2) {
   return this.preSum[row2 + 1][col2 + 1] - this.preSum[row1][col2 + 1] - this.preSum[row2 + 1][col1] + this.preSum[row1][col1]
-};
+}
 
 /**
  * 差分数组类型题目
@@ -718,7 +750,7 @@ var carPooling = function (trips, capacity) {
   }
   // 如果循环顺利结束，就代表全程不会超载，返回true
   return true
-};
+}
 
 // 1109 航班预定统计
 /**
@@ -741,7 +773,7 @@ var corpFlightBookings = function (bookings, n) {
     res[i] = temp
   }
   return res
-};
+}
 
 // 数组转树
 const arrayToTree = arr => {
@@ -750,7 +782,7 @@ const arrayToTree = arr => {
   for (let item of arr) {
     item.children = []
     map.set(item.id, item)
-    const {parentId} = item
+    const { parentId } = item
     if (parentId !== undefined) {
       const parentNode = map.get(parentId)
       if (parentNode) {
@@ -767,17 +799,14 @@ const arrayToTree = arr => {
   return tree
 }
 const sourceArray = [
-  {id: 2, name: '部门B', parentId: null},
-  {id: 3, name: '部门C', parentId: 1},
-  {id: 1, name: '部门A', parentId: 2},
-  {id: 4, name: '部门D', parentId: 1},
-  {id: 5, name: '部门E', parentId: 2},
-  {id: 6, name: '部门F', parentId: 3},
-  {id: 7, name: '部门G', parentId: 2},
-  {id: 8, name: '部门H', parentId: 4}
+  { id: 2, name: '部门B', parentId: null },
+  { id: 3, name: '部门C', parentId: 1 },
+  { id: 1, name: '部门A', parentId: 2 },
+  { id: 4, name: '部门D', parentId: 1 },
+  { id: 5, name: '部门E', parentId: 2 },
+  { id: 6, name: '部门F', parentId: 3 },
+  { id: 7, name: '部门G', parentId: 2 },
+  { id: 8, name: '部门H', parentId: 4 }
 ]
 console.log('数组转为树')
 console.log(arrayToTree(sourceArray))
-
-
-
