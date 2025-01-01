@@ -305,7 +305,7 @@ function sum(num) {
 }
 
 // promise.all
-const all = function (promises) {
+Promise.myAll = function (promises) {
   const result = [],
     len = promises.length
   let index = 0
@@ -330,7 +330,7 @@ const all = function (promises) {
 }
 
 // promise.race
-const race = function (promises) {
+Promise.myRace = function (promises) {
   return new Promise((resolve, reject) => {
     for (let p of promises) {
       Promise.resolve(p).then(
@@ -345,6 +345,22 @@ const race = function (promises) {
   })
 }
 
+// 测试
+const p1 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 100, 'p1')
+})
+const p2 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 500, 'p2')
+})
+const p3 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 1000, 'p3')
+})
+console.log('all测试')
+Promise.myAll([p1, p2, p3]).then(res => console.log(res)) // [p1,p2,p3]
+
+console.log('race测试')
+Promise.myRace([p1, p2, p3]).then(res => console.log(res)) // p1
+
 // promise.allSettled
 /**
  * @param promises
@@ -352,7 +368,7 @@ const race = function (promises) {
  * promise.all中只要有任何一个promise是reject。整个promise就会立刻变为reject状态，只有全部promise都resolve，才会执行.then中的成功的回调
  * promise.allSettled中会等到全部的promise都变为最终状态才会返回
  */
-const allSettled = function (promises) {
+Promise.myAllSettled = function (promises) {
   return Promise.all(
     promises.map(p =>
       Promise.resolve(p)
@@ -366,7 +382,7 @@ const allSettled = function (promises) {
 }
 
 // promise.any
-const any = function (promises) {
+Promise.myAny = function (promises) {
   return new Promise((resolve, reject) => {
     const errors = []
     promises.forEach((promise, index) => {
@@ -386,25 +402,53 @@ const any = function (promises) {
   })
 }
 
-// 测试
-const p1 = new Promise((resolve, reject) => {
-  setTimeout(resolve, 100, 'p1')
-})
-const p2 = new Promise((resolve, reject) => {
-  setTimeout(resolve, 500, 'p2')
-})
-const p3 = new Promise((resolve, reject) => {
-  setTimeout(resolve, 1000, 'p3')
-})
-console.log('all测试')
-all([p1, p2, p3]).then(res => console.log(res)) // [p1,p2,p3]
+// promise.resolve
+/* 
+如果传入普通值：如果传入普通值，Promise.resolve 会返回一个已解决的 Promise，并将该值作为 resolve 的结果。
+如果传入的是Promise：直接返回这个Promise
+如果传入的是一个包含then方法的对象：会调用对象中的then方法，并且使行为与promise一致化
+*/
+Promise.myResolve = function (value) {
+  if (value instanceof Promise) {
+    return value
+  }
+  // 否则返回一个新的 Promise 并 resolve
+  return new Promise(resolve => resolve(value))
+}
 
-console.log('race测试')
-race([p1, p2, p3]).then(res => console.log(res)) // p1
+// 测试promise.resolve
+// 传入普通值
+Promise.myResolve(42).then(value => console.log(42, value)) // 输出: 42
+// 传入promise
+const originalPromise = Promise.resolve('Hello')
+const newPromise = Promise.myResolve(originalPromise)
+console.log(true, originalPromise === newPromise) // 输出: true
+// 传入thenable对象
+const thenableObject = {
+  then: (resolve, reject) => {
+    resolve(666)
+  }
+}
+Promise.myResolve(thenableObject).then(value => console.log(value)) // 输出：666
 
-// Object.create
+// promise.reject
+Promise.myReject = function (reason) {
+  return new Promise((_, reject) => {
+    reject(reason)
+  })
+}
 
-// Object.assign
+// promise.try
+Promise.myTry = function (fn) {
+  return new Promise((resolve, reject) => {
+    try {
+      const result = fn() // 执行传入的函数
+      resolve(result) // 如果成功，解析 Promise
+    } catch (error) {
+      reject(error) // 如果抛出错误，拒绝 Promise
+    }
+  })
+}
 
 // JSON.stringify
 // 关键在于各个表边界条件的控制
