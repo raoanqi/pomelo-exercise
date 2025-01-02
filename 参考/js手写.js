@@ -81,7 +81,7 @@ const throttle = function (fn, delay) {
   }
 }
 
-// flat
+// flat：注意这个方法，非常巧妙
 Array.prototype.myFlat = function (level = 1) {
   if (!Array.isArray(this)) throw new Error('不是数组')
   if (typeof level !== 'number' || level <= 0) return this
@@ -202,7 +202,7 @@ class Subject {
 
   // 删除观察者
   removeObserver(observer) {
-    this.observers.filter(o => o !== observer)
+    this.observers = this.observers.filter(o => o !== observer)
   }
 
   // 通知观察者
@@ -382,6 +382,7 @@ Promise.myAllSettled = function (promises) {
 }
 
 // promise.any
+// 任意一个p被resolve，直接resolve，如果全部都reject，返回一个AggregateError错误
 Promise.myAny = function (promises) {
   return new Promise((resolve, reject) => {
     const errors = []
@@ -403,7 +404,7 @@ Promise.myAny = function (promises) {
 }
 
 // promise.resolve
-/* 
+/*
 如果传入普通值：如果传入普通值，Promise.resolve 会返回一个已解决的 Promise，并将该值作为 resolve 的结果。
 如果传入的是Promise：直接返回这个Promise
 如果传入的是一个包含then方法的对象：会调用对象中的then方法，并且使行为与promise一致化
@@ -438,6 +439,15 @@ Promise.myReject = function (reason) {
   })
 }
 
+// 测试promise.reject
+Promise.myReject('Error occurred')
+  .then(() => {
+    console.log('Resolved')
+  })
+  .catch(err => {
+    console.log(err) // 输出: Error occurred
+  })
+
 // promise.try
 Promise.myTry = function (fn) {
   return new Promise((resolve, reject) => {
@@ -449,6 +459,21 @@ Promise.myTry = function (fn) {
     }
   })
 }
+
+// 测试promise.try
+// 示例 1: 成功情况
+Promise.myTry(() => {
+  console.log('Executing function...')
+  return 'Success!'
+}).then(result => {
+  console.log(result) // 输出: Success!
+})
+// 示例 2: 抛出错误的情况
+Promise.myTry(() => {
+  throw new Error('Something went wrong')
+}).catch(err => {
+  console.error(err.message) // 输出: Something went wrong
+})
 
 // JSON.stringify
 // 关键在于各个表边界条件的控制
@@ -555,13 +580,3 @@ function parse(str) {
       .map(value => parse(value))
   }
 }
-
-// 原型链继承
-
-// 构造函数继承
-
-// 组合继承
-
-// 寄生组合继承
-
-// ES6继承
