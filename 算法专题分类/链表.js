@@ -1,6 +1,8 @@
 //合并两个有序链表
+// 时间复杂度O(m+n)
+// 空间复杂度O(1)
 const mergeTwoLinkList = (l1, l2) => {
-  const dummy = new ListNode(0)
+  const dummy = new ListNode(-999)
   let current = dummy
 
   while (l1 && l2) {
@@ -61,6 +63,8 @@ const reverseList = head => {
 }
 
 //回文链表
+// 时间复杂度O(n)
+// 空间复杂度O(1)
 const isPalindrome = l1 => {
 // 定义函数翻转链表
   const reverseLinkList = node => {

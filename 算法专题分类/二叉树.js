@@ -29,6 +29,8 @@ var preorderTraversal = function (root) {
 }
 
 //二叉树中序遍历:递归解法
+// 时间复杂度O(n)，n是树里面的节点个数
+// 空间复杂度O(h)，h是树的高度
 const inOrderTraverse = root => {
   const res = []
   const traverse = node => {
@@ -89,6 +91,8 @@ var postorderTraversal = function (root) {
 }
 
 //对称二叉树
+// 时间复杂度O(n)，n是节点数量
+// 空间复杂度O(h)，h是树的高度
 const isMirrorTree = root => {
   const isMirror = (node1, node2) => {
     if (!node1 && !node2) return true
@@ -100,6 +104,8 @@ const isMirrorTree = root => {
 }
 
 //二叉树的最大深度
+// 时间复杂度O(n)，n是节点数量
+// 空间复杂度O(h)，h是树的高度
 const maxDepth = root => {
   const calc = node => {
     if (!node) return 0
@@ -148,7 +154,7 @@ const diameterOfBinaryTree = root => {
       rightDepth = calcDepth(node.right)
     // 计算过程不断更新直径
     diameter = Math.max(diameter, leftDepth + rightDepth)
-    // 因为使用递归运算计算深度，所以每次向下递归一层，深度值都要+1
+    // 当前节点的深度是子节点深度加1
     return Math.max(leftDepth, rightDepth) + 1
   }
   calcDepth(root)

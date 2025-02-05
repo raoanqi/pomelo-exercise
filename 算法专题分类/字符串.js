@@ -1,4 +1,6 @@
 //有效括号
+// 时间复杂度O(n)
+// 空间复杂度O(n)
 const validBrackets = str => {
   const stack = [], len = str.length
   for (let i = 0; i < len; i++) {

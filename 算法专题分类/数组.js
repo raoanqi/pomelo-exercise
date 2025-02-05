@@ -12,6 +12,8 @@ const twoNumberSum = (nums, target) => {
 }
 
 //买卖股票的最佳时机
+// 时间复杂度O(n)
+// 空间复杂度O(1)
 const sellStock = prices => {
   const len = prices.length
   let benefit = 0,

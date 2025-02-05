@@ -1,4 +1,6 @@
 //爬楼梯
+// 时间复杂度O(n)
+// 空间复杂度O(1)
 const stairs = (n) => {
   if (n <= 0) return 0
   if (n === 1) return 1
