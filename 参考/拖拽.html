@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>拖拽</title>
+  <style>
+      #box {
+          width: 100px;
+          height: 100px;
+          background-color: red;
+          position: absolute;
+          top: 100px;
+          left: 100px;
+      }
+  </style>
+</head>
+<body>
+<div id='box'></div>
+<script>
+  window.onload = function() {
+    const box = document.getElementById('box')
+    box.onmousedown = function(ev) {
+      // 从ie9开始支持event传入的方式，如果要兼容ie8以及更早的型号，需要使用window.event
+      const oEvent = ev || window.event
+      let distanceX = oEvent.clientX - box.offsetLeft // 鼠标到可视区左边的距离 - box到页面左边的距离
+      let distanceY = oEvent.clientY - box.offsetTop
+      document.onmousemove = function(ev) {
+        const oEvent = ev || window.event
+        let left = oEvent.clientX - distanceX
+        let top = oEvent.clientY - distanceY
+        if (left <= 0) {
+          left = 0
+        } else if (left >= document.documentElement.clientWidth - box.offsetWidth) {
+          left = document.documentElement.clientWidth - box.offsetWidth
+        }
+        if (top <= 0) {
+          top = 0
+        } else if (top >= document.documentElement.clientHeight - box.offsetHeight) {
+          top = document.documentElement.clientHeight - box.offsetHeight
+        }
+        box.style.left = left + 'px'
+        box.style.top = top + 'px'
+      }
+      box.onmouseup = function() {
+        document.onmousemove = null
+        box.onmouseup = null
+      }
+    }
+  }
+
+</script>
+</body>
+</html>
