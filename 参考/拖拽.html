@@ -17,30 +17,45 @@
 <body>
 <div id='box'></div>
 <script>
+  // 确保页面完全加载之后再执行函数，可以确保dom元素已经存在
   window.onload = function() {
     const box = document.getElementById('box')
+    // 监听box上的mousedown事件
     box.onmousedown = function(ev) {
       // 从ie9开始支持event传入的方式，如果要兼容ie8以及更早的型号，需要使用window.event
       const oEvent = ev || window.event
+      // 计算点击的点距离box左上角的距离
       let distanceX = oEvent.clientX - box.offsetLeft // 鼠标到可视区左边的距离 - box到页面左边的距离
       let distanceY = oEvent.clientY - box.offsetTop
+      // 当鼠标移动时，触发mousemove事件
       document.onmousemove = function(ev) {
         const oEvent = ev || window.event
+        // 计算box左上角的新坐标
         let left = oEvent.clientX - distanceX
         let top = oEvent.clientY - distanceY
+        // 如果left小于0，把left重置为0，避免移出左边界
         if (left <= 0) {
           left = 0
         } else if (left >= document.documentElement.clientWidth - box.offsetWidth) {
+          // 防止移出右边界
+          /**
+           * document.documentElement.clientWidth: 浏览器可视区域的宽度，不包括滚动条
+           * box.offsetWidth: box的宽度，包括border和padding，但是不包括margin
+           */
           left = document.documentElement.clientWidth - box.offsetWidth
         }
+        // 防止移出上边界
         if (top <= 0) {
           top = 0
         } else if (top >= document.documentElement.clientHeight - box.offsetHeight) {
+          // 防止移出下边界
           top = document.documentElement.clientHeight - box.offsetHeight
         }
+        // 重新设置box的坐标
         box.style.left = left + 'px'
         box.style.top = top + 'px'
       }
+      // 用户松开鼠标按钮时，移除对应的事件监听器
       box.onmouseup = function() {
         document.onmousemove = null
         box.onmouseup = null

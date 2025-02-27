@@ -149,7 +149,7 @@ const deepClone = function (target) {
 const sleep1 = duration => {
   for (let startTime = +new Date(); +new Date() - startTime < duration; ) {}
 }
-const sleep2 = duration => new Promise(resolve => setTimeout(resolve, duration))
+const sleep2 = duration => new Promise(resolve => setTimeout(() => resolve(), duration))
 
 // 发布订阅模式
 class EventBus {
@@ -579,4 +579,65 @@ function parse(str) {
       .split(',')
       .map(value => parse(value))
   }
+}
+
+// 获取当前url中的请求参数
+const getUrlParam = name => {
+  const search = window.location.search.slice(1)
+  return new URLSearchParams(search).get(name)
+}
+
+// lodash.isEqual
+const isEqual = (obj1, obj2) => {
+  const isObject = target => typeof target === 'object' && target !== null
+  if (!isObject(obj1) || !isObject(obj2)) return obj1 === obj2
+  if (obj1 === obj2) return true
+  const obj1Keys = Object.keys(obj1)
+  const obj2Keys = Object.keys(obj2)
+  if (obj1Keys.length !== obj2Keys.length) return false
+  for (let key of obj1Keys) {
+    if (!isEqual(obj1[key], obj2[key])) return false
+  }
+  return true
+}
+
+// 使用promise加载一张图片
+const loadImage = src => {
+  return new Promise((resolve, reject) => {
+    const image = new Image()
+    image.onload = () => {
+      resolve(image)
+    }
+    image.onerror = () => {
+      reject(`Failed to load image: ${src}`)
+    }
+    image.src = src
+  })
+}
+// 请求示例
+loadImage('https://s.poetries.top/uploads/2022/07/ee7310c4f45b9bd6.png')
+  .then(image => {
+    console.log('Image loaded successfully.')
+    document.body.appendChild(image)
+  })
+  .catch(error => {
+    console.error(error)
+  })
+
+// 两个数组的交集，并集
+const getIntersection = (arr1, arr2) => {
+  const res = new Set()
+  const set2 = new Set(arr2)
+  for (let item of arr1) {
+    if (set2.has(item)) res.add(item)
+  }
+  return Array.from(res)
+}
+
+const getUnion = (arr1, arr2) => {
+  const res = new Set(arr1)
+  for (let item of arr2) {
+    res.add(item)
+  }
+  return res
 }
