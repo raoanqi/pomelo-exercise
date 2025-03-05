@@ -121,14 +121,17 @@ const curry = function (fn) {
 }
 
 // 深拷贝
-const deepClone = function (target) {
+const deepClone = function (target, map = new WeakMap()) {
   if (typeof target !== 'object' || target === null) return target
+  // 下面这一行的作用是用来防止循环引用
+  if (map.has(target)) return map.get(target)
   let res
   if (Array.isArray(target)) {
     res = []
+    map.set(target, res) // 将当前对象存入 WeakMap
     const len = target.length
     for (let i = 0; i < len; i++) {
-      res[i] = deepClone(target[i])
+      res[i] = deepClone(target[i], map)
     }
   } else if (target instanceof RegExp) {
     res = new RegExp(target)
@@ -137,9 +140,10 @@ const deepClone = function (target) {
     res = new Date(target.getTime())
   } else {
     res = {}
+    map.set(target, res) // 将当前对象存入 WeakMap
     const keys = Object.keys(target)
     for (let key of keys) {
-      res[key] = deepClone(target[key])
+      res[key] = deepClone(target[key], map)
     }
   }
   return res
@@ -640,4 +644,44 @@ const getUnion = (arr1, arr2) => {
     res.add(item)
   }
   return res
+}
+
+// LRU缓存
+/**
+ * LRU算法特点：最近最少使用
+ * get：
+ * 访问一个数据时，如果数据存在，需要将这项数据的位置置换到队列尾部
+ * put：
+ * 写入数据时，需要将数据放在队列尾部
+ *
+ * 这里使用map结构进行实现，map是有序数据结构（按照数据进入map的顺序排列）
+ */
+class LRU {
+  constructor(capacity) {
+    this.capacity = capacity
+    this.content = new Map()
+  }
+
+  // 获取缓存
+  get(key) {
+    const value = this.content.get(key)
+    if (!value) return -1
+    // 如果数据存在，就先删除再设置，这样确保最新访问的数据在队列的最后
+    this.content.delete(key)
+    this.content.set(key, value)
+    return value
+  }
+
+  // 写入缓存
+  put(key, value) {
+    // 如果map中已经存在这个数据，就先删除
+    if (this.content.has(key)) {
+      this.content.delete(key)
+    } else if (this.content.size === this.capacity) {
+      // 如果map的容量已经满了，先删除头部的数据
+      this.content.delete(this.content.keys().next().value)
+    }
+    // 然后将数据在map尾部塞入
+    this.content.set(key, value)
+  }
 }

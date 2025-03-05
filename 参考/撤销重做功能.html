@@ -1,0 +1,37 @@
+<div>
+  <input id='input-text' />
+  <!--撤销：撤销用户的输入-->
+  <button id='undo'>undo</button>
+  <!--恢复：恢复用户的输入-->
+  <button id='redo'>redo</button>
+</div>
+
+<script>
+  const inputText = document.getElementById('input-text')
+  const undo = document.getElementById('undo')
+  const redo = document.getElementById('redo')
+
+  const list = [inputText.value] // 初始化列表
+  let currIndex = list.length - 1 // 初始化index
+
+  inputText.addEventListener('change', e => {
+    const text = e.target.value
+
+    list.length = currIndex + 1 // 截取掉index后面的部分
+    list.push(text)
+    currIndex++ // index增加
+  })
+
+  undo.addEventListener('click', () => {
+    if (currIndex <= 0) return
+    currIndex-- // index减少
+    inputText.value = list[currIndex]
+  })
+
+  redo.addEventListener('click', () => {
+    if (currIndex >= list.length - 1) return
+    currIndex++ // index增加
+    inputText.value = list[currIndex]
+  })
+</script>
+
